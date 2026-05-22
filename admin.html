@@ -3,177 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FWCB - Admin Control Center</title>
+    <title>FWCB - Admin Control Panel</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .admin-container { max-width: 650px; margin: 40px auto; padding: 25px; background: #1e222b; border-radius: 12px; border: 1px solid #3e4451; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-        .admin-container h2 { color: #fff; margin-bottom: 20px; text-align: center; font-size: 24px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; color: #abb2bf; margin-bottom: 5px; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; background: #282c34; border: 1px solid #3e4451; border-radius: 50px; color: #fff; box-sizing: border-box; font-size: 14px; transition: 0.2s; }
-        .form-group input:focus, .form-group select:focus { border-color: #00c774; outline: none; }
+        /* Admin Specific Custom Styling - Premium Responsive Gaming Theme */
+        .admin-body {
+            padding: 10px;
+            max-width: 750px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 400px;
+            margin: 80px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-top: 3px solid var(--gaming-cyan);
+            box-sizing: border-box;
+        }
+        .login-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-top: 0;
+            color: #fff;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .form-control {
+            width: 100%;
+            background: #161b22;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 12px;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            border-color: var(--gaming-cyan);
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+        select.form-control option {
+            background: var(--bg-card);
+            color: #fff;
+        }
+        .admin-btn {
+            font-family: 'Orbitron', sans-serif;
+            width: 100%;
+            background: var(--gaming-cyan);
+            color: #06090e;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .admin-btn:hover {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        .panel-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            font-size: 16px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+        .logout-btn {
+            font-family: 'Orbitron', sans-serif;
+            background: #ff007f;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 10px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
         
-        .action-btn { width: 100%; padding: 12px; background: #00c774; border: none; border-radius: 50px; color: #fff; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.2s; text-align: center; }
-        .action-btn:hover { background: #00b368; box-shadow: 0 0 15px rgba(0,199,116,0.4); }
-        .logout-btn { background: #e06c75; margin-top: 15px; }
-        .logout-btn:hover { background: #d15c65; box-shadow: 0 0 15px rgba(224,108,117,0.4); }
+        /* FIXED: নতুন গেমিং ট্যাব নেভিগেশন বার */
+        .admin-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: #10141c;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .tab-trigger {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 6px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .tab-trigger.active {
+            background: var(--gaming-cyan);
+            color: #06090e;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
         
-        .management-section { margin-top: 40px; background: #1e222b; border-radius: 12px; border: 1px solid #3e4451; padding: 20px; color: #fff; }
-        .sort-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .sort-controls { display: flex; align-items: center; gap: 8px; }
-        .sort-controls select { width: auto; padding: 8px 15px; border-radius: 20px; background: #282c34; color: #fff; border: 1px solid #3e4451; }
-        
-        .btn-apply-sort { padding: 8px 15px; background: #98c379; color: #1e222b; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s; }
-        .btn-apply-sort:hover { background: #82ab66; box-shadow: 0 0 10px rgba(152,195,121,0.4); }
-        
-        .clan-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        .clan-table th, .clan-table td { padding: 12px; text-align: left; border-bottom: 1px solid #282c34; }
-        .clan-table th { background: #282c34; color: #abb2bf; font-weight: 600; }
-        
-        .btn-table { padding: 6px 12px; border: none; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 5px; transition: 0.2s; }
-        .btn-edit { background: #61afef; color: #1e222b; }
-        .btn-edit:hover { background: #4fa1e3; }
-        .btn-delete { background: #e06c75; color: #fff; }
-        .btn-delete:hover { background: #d15c65; }
+        /* ট্যাব কন্টেন্ট মডিউল */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
 
-        #admin-panel-view { display: none; }
-        #login-view { display: block; }
+        .action-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+        .action-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            color: var(--gaming-cyan);
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-grid-layout, .form-split-layout {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); 
+            gap: 12px;
+        }
+        
+        /* ডেক্সটপ উইন্ডোর জন্য গ্রিড রেশিও পরিবর্তন */
+        @media (min-width: 550px) {
+            .form-grid-layout { grid-template-columns: repeat(2, 1fr); }
+            .form-split-layout { grid-template-columns: repeat(2, 1fr); }
+            .tab-trigger { font-size: 12px; }
+            .panel-header h2 { font-size: 20px; }
+        }
+
+        /* টেবিল রেসপনসিভ কন্টেইনার */
+        .clan-table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .admin-clan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            color: var(--text-primary);
+            min-width: 480px;
+        }
+        .admin-clan-table th, .admin-clan-table td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .admin-clan-table th {
+            background: #161b22;
+            color: var(--gaming-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-table {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            margin-right: 3px;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+        .btn-edit { background: #0284c7; color: #fff; }
+        .btn-delete { background: #ff007f; color: #fff; }
+
+        .alert-error {
+            color: #ff007f;
+            font-size: 13px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+            font-family: 'Orbitron', sans-serif;
+        }
     </style>
 </head>
-<body>
+<body class="admin-body">
 
-    <div class="admin-container" id="login-view">
-        <h2>FWCB Admin Login</h2>
-        <div class="form-group">
-            <label>Admin Email</label>
-            <input type="email" id="login-email" placeholder="Enter admin email">
+    <div id="login-layer">
+        <div class="login-card">
+            <h2>FWCB Control Login</h2>
+            <div class="form-group">
+                <label>ADMIN SECURITY EMAIL</label>
+                <input type="email" id="login-email" class="form-control" placeholder="admin@fwcb.com">
+            </div>
+            <div class="form-group">
+                <label>ENCRYPTED PASSWORD</label>
+                <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+            </div>
+            <button class="admin-btn" id="btn-login">Verify Identity</button>
+            <div id="login-error" class="alert-error">Invalid Security Credentials</div>
         </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="login-password" placeholder="Enter password">
-        </div>
-        <button class="action-btn" id="btn-login">Login to Portal</button>
     </div>
 
-    <div class="admin-container" id="admin-panel-view">
-        <h2 id="form-title">Add New Community Clan</h2>
-        
-        <input type="hidden" id="editing-doc-id" value="">
+    <div id="admin-panel-layer" style="display: none;">
+        <header class="panel-header">
+            <h2>FWCB Admin Console</h2>
+            <button class="logout-btn" id="btn-logout">Logout</button>
+        </header>
 
-        <div class="form-group">
-            <label>Clan Name</label>
-            <input type="text" id="clan-name" placeholder="e.g. Evil Army">
-        </div>
+        <nav class="admin-tabs">
+            <button class="tab-trigger active" onclick="switchAdminTab('tab-config', this)">⚙️ Config</button>
+            <button class="tab-trigger" id="form-tab-btn" onclick="switchAdminTab('tab-form', this)">➕ Add Clan</button>
+            <button class="tab-trigger" onclick="switchAdminTab('tab-manifest', this)">📋 Manifest</button>
+        </nav>
 
-        <div class="form-group">
-            <label>Clan Tag</label>
-            <input type="text" id="clan-tag" placeholder="e.g. #2G0JRQV0C">
-        </div>
-
-        <div class="form-group">
-            <label>Category Tier</label>
-            <select id="clan-category">
-                <option value="FWA">FWA Clan</option>
-                <option value="GFL">GFL Clan</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Clan Level</label>
-            <input type="number" id="clan-level" placeholder="e.g. 15">
-        </div>
-
-        <div class="form-group">
-            <label>Capital Hall Level</label>
-            <select id="clan-capital">
-                <option value="1">Level 1</option>
-                <option value="2">Level 2</option>
-                <option value="3">Level 3</option>
-                <option value="4">Level 4</option>
-                <option value="5">Level 5</option>
-                <option value="6">Level 6</option>
-                <option value="7">Level 7</option>
-                <option value="8">Level 8</option>
-                <option value="9">Level 9</option>
-                <option value="10">Level 10</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>CWL League Status</label>
-            <select id="clan-cwl">
-                <option value="Unranked">Unranked</option>
-                <option value="Bronze League III">Bronze League III</option>
-                <option value="Bronze League II">Bronze League II</option>
-                <option value="Bronze League I">Bronze League I</option>
-                <option value="Silver League III">Silver League III</option>
-                <option value="Silver League II">Silver League II</option>
-                <option value="Silver League I">Silver League I</option>
-                <option value="Gold League III">Gold League III</option>
-                <option value="Gold League II">Gold League II</option>
-                <option value="Gold League I">Gold League I</option>
-                <option value="Crystal League III">Crystal League III</option>
-                <option value="Crystal League II">Crystal League II</option>
-                <option value="Crystal League I">Crystal League I</option>
-                <option value="Master League III">Master League III</option>
-                <option value="Master League II">Master League II</option>
-                <option value="Master League I">Master League I</option>
-                <option value="Champion League III">Champion League III</option>
-                <option value="Champion League II">Champion League II</option>
-                <option value="Champion League I">Champion League I</option>
-                <option value="Titan League III">Titan League III</option>
-                <option value="Titan League II">Titan League II</option>
-                <option value="Titan League I">Titan League I</option>
-                <option value="Legend League">Legend League</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Clan Badge / Logo Image URL (Postimages Direct Link)</label>
-            <input type="text" id="clan-badge-url" placeholder="Paste image address link here">
-        </div>
-
-        <div class="form-group">
-            <label>Clan Leader FB Link</label>
-            <input type="text" id="clan-leader-fb" placeholder="https://facebook.com/...">
-        </div>
-
-        <button class="action-btn" id="btn-save-action" onclick="saveClanToCloud()">Save Clan Profile</button>
-        
-        <div class="management-section">
-            <div class="sort-wrapper">
-                <h3>Registered Clans List</h3>
-                <div class="sort-controls">
-                    <select id="sort-selector" onchange="renderClansTable()">
-                        <option value="name">Name (A-Z)</option>
-                        <option value="level">Clan Level (High-Low)</option>
-                        <option value="category">Category (FWA/GFL)</option>
+        <div id="tab-config" class="tab-content active">
+            <div class="action-card">
+                <h3>Global Directory Settings</h3>
+                <div class="form-group">
+                    <label>ORDER CLANS BY:</label>
+                    <select id="setting-sort" class="form-control" style="margin-bottom: 12px;" onchange="renderAdminTable()">
+                        <option value="name">Alphabetical Name (A-Z)</option>
+                        <option value="level">Highest Clan Level</option>
+                        <option value="category">Category Alliance</option>
                     </select>
-                    <button class="btn-apply-sort" onclick="applySortOrderToWebsite()">Apply Order to Website</button>
+                    <button class="admin-btn" id="btn-save-settings">Apply Config To Website</button>
                 </div>
             </div>
-            
-            <div style="overflow-x: auto;">
-                <table class="clan-table">
-                    <thead>
-                        <tr>
-                            <th>Clan Name</th>
-                            <th>Tag</th>
-                            <th>Level</th>
-                            <th>Category</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-clans-tbody">
-                        <tr>
-                            <td colspan="5" style="text-align: center; color: #abb2bf;">Loading clans roster...</td>
-                        </tr>
-                    </tbody>
-                </table>
+        </div>
+
+        <div id="tab-form" class="tab-content">
+            <div class="action-card">
+                <h3 id="form-title">Register New Alliance</h3>
+                <input type="hidden" id="editing-doc-id" value="">
+
+                <form id="clan-register-form" onsubmit="return false;">
+                    <div class="form-grid-layout">
+                        <div class="form-group">
+                            <label>CLAN NAME</label>
+                            <input type="text" id="clan-name" class="form-control" required placeholder="e.g. Evil Army">
+                        </div>
+                        <div class="form-group">
+                            <label>CLAN IN-GAME TAG</label>
+                            <input type="text" id="clan-tag" class="form-control" required placeholder="e.g. #2G0JRQV0C">
+                        </div>
+                        <div class="form-group">
+                            <label>ALLIANCE ALLOCATION</label>
+                            <select id="clan-cat" class="form-control">
+                                <option value="FWA">FWA Clan</option>
+                                <option value="GFL">GFL Clan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>CLAN LEVEL</label>
+                            <input type="number" id="clan-level" class="form-control" required placeholder="e.g. 15">
+                        </div>
+                        <div class="form-group">
+                            <label>CAPITAL HALL TIER</label>
+                            <select id="clan-capital" class="form-control">
+                                <option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option><option value="6">Level 6</option><option value="7">Level 7</option><option value="8">Level 8</option><option value="9">Level 9</option><option value="10">Level 10</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>CWL LEAGUE RANK</label>
+                            <select id="clan-cwl" class="form-control">
+                                <option value="Unranked">Unranked</option><option value="Bronze League III">Bronze League III</option><option value="Bronze League II">Bronze League II</option><option value="Bronze League I">Bronze League I</option><option value="Silver League III">Silver League III</option><option value="Silver League II">Silver League II</option><option value="Silver League I">Silver League I</option><option value="Gold League III">Gold League III</option><option value="Gold League II">Gold League II</option><option value="Gold League I">Gold League I</option><option value="Crystal League III">Crystal League III</option><option value="Crystal League II">Crystal League II</option><option value="Crystal League I">Crystal League I</option><option value="Master League III">Master League III</option><option value="Master League II">Master League II</option><option value="Master League I">Master League I</option><option value="Champion League III">Champion League III</option><option value="Champion League II">Champion League II</option><option value="Champion League I">Champion League I</option><option value="Titan League III">Titan League III</option><option value="Titan League II">Titan League II</option><option value="Titan League I">Titan League I</option><option value="Legend League">Legend League</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 5px;">
+                        <label>BADGE URL (Postimages Direct Link)</label>
+                        <input type="url" id="clan-badge" class="form-control" placeholder="Paste link here...">
+                    </div>
+                    <div class="form-split-layout">
+                        <div class="form-group">
+                            <label>IN-GAME DIRECT SHARE LINK</label>
+                            <input type="url" id="clan-link" class="form-control" placeholder="https://link.clashofclans.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>LEADER FB PROFILE LINK</label>
+                            <input type="url" id="clan-leader-fb" class="form-control" placeholder="https://facebook.com/...">
+                        </div>
+                    </div>
+                    <button class="admin-btn" id="btn-save-clan" style="margin-top: 5px;">Save Clan Matrix</button>
+                </form>
             </div>
         </div>
 
-        <button class="action-btn logout-btn" id="btn-logout">Secure Logout</button>
+        <div id="tab-manifest" class="tab-content">
+            <div class="action-card">
+                <h3>Global Alliance Manifest</h3>
+                <div class="clan-table-wrapper">
+                    <table class="admin-clan-table">
+                        <thead>
+                            <tr>
+                                <th>Clan Name</th>
+                                <th>Tag</th>
+                                <th>Level</th>
+                                <th>Category</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="panel-clans-tbody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted);">Synchronizing fields...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -194,185 +382,201 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const loginView = document.getElementById('login-view');
-        const adminView = document.getElementById('admin-panel-view');
+        const loginLayer = document.getElementById('login-layer');
+        const adminLayer = document.getElementById('admin-panel-layer');
+        const loginErr = document.getElementById('login-error');
 
-        let allClansLocalArray = [];
+        let localClansArray = [];
+
+        // ফ্রন্টঅ্যান্ড ট্যাব সুইচিং মাস্টার লজিক
+        window.switchAdminTab = function(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-trigger').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                loginView.style.display = 'none';
-                adminView.style.display = 'block';
-                loadCurrentSavedOrder();
-                fetchClansForAdmin();
+                loginLayer.style.display = 'none';
+                adminLayer.style.display = 'block';
+                loadSavedSortConfig();
+                syncAdminDashboard();
             } else {
-                loginView.style.display = 'block';
-                adminView.style.display = 'none';
+                loginLayer.style.display = 'block';
+                adminLayer.style.display = 'none';
             }
         });
 
         document.getElementById('btn-login').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value.trim();
-            const pass = document.getElementById('login-password').value.trim();
-            if(!email || !pass) return alert("Fill up all credentials.");
+            const pass = document.getElementById('login-password').value;
+            loginErr.style.display = 'none';
+
+            if(!email || !pass) return;
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-            } catch(e) {
-                alert("Login Failed: " + e.message);
+            } catch (err) {
+                console.error(err);
+                loginErr.style.display = 'block';
             }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', async () => {
-            await signOut(auth);
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
             location.reload();
         });
 
-        async function loadCurrentSavedOrder() {
+        async function loadSavedSortConfig() {
             try {
                 const configSnap = await getDoc(doc(db, "fwcb_settings", "sorting"));
                 if(configSnap.exists()) {
-                    document.getElementById('sort-selector').value = configSnap.data().orderBy || 'name';
+                    document.getElementById('setting-sort').value = configSnap.data().orderBy || 'name';
                 }
             } catch(e) { console.error(e); }
         }
 
-        async function fetchClansForAdmin() {
+        document.getElementById('btn-save-settings').addEventListener('click', async () => {
+            const sortVal = document.getElementById('setting-sort').value;
+            try {
+                await setDoc(doc(db, "fwcb_settings", "sorting"), { 
+                    orderBy: sortVal,
+                    updatedAt: new Date().getTime()
+                });
+                alert(`Success! Website layout is now sorted by: ${sortVal.toUpperCase()}`);
+            } catch (e) {
+                console.error(e);
+                alert("Matrix write operation fault.");
+            }
+        });
+
+        document.getElementById('btn-save-clan').addEventListener('click', async () => {
+            const form = document.getElementById('clan-register-form');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const docId = document.getElementById('editing-doc-id').value;
+            const payload = {
+                name: document.getElementById('clan-name').value.trim(),
+                tag: document.getElementById('clan-tag').value.trim().toUpperCase(),
+                category: document.getElementById('clan-cat').value,
+                level: document.getElementById('clan-level').value,
+                capitalLevel: document.getElementById('clan-capital').value,
+                cwlLeague: document.getElementById('clan-cwl').value,
+                badgeUrl: document.getElementById('clan-badge').value.trim(),
+                clanLink: document.getElementById('clan-link').value.trim(),
+                leaderFb: document.getElementById('clan-leader-fb').value.trim()
+            };
+
+            try {
+                if(docId) {
+                    await updateDoc(doc(db, "fwcb_clans", docId), payload);
+                    alert("Clan Profile updated successfully!");
+                } else {
+                    await addDoc(collection(db, "fwcb_clans"), payload);
+                    alert("New Clan Profile committed successfully!");
+                }
+                resetFormState();
+                syncAdminDashboard();
+                
+                // সেভ করার পর অটোমেটিক Manifest ট্যাবে নিয়ে যাবে দেখার জন্য
+                document.querySelectorAll('.tab-trigger')[2].click();
+            } catch (e) {
+                console.error(e);
+                alert("Cloud deployment rejected.");
+            }
+        });
+
+        async function syncAdminDashboard() {
             try {
                 const snap = await getDocs(collection(db, "fwcb_clans"));
-                allClansLocalArray = [];
-                snap.forEach(doc => {
-                    allClansLocalArray.push({ id: doc.id, ...doc.data() });
+                localClansArray = [];
+                snap.forEach(docSnap => {
+                    localClansArray.push({ id: docSnap.id, ...docSnap.data() });
                 });
-                renderClansTable();
-            } catch(e) {
+                renderAdminTable();
+            } catch (e) {
                 console.error(e);
             }
         }
 
-        window.renderClansTable = function() {
-            const tbody = document.getElementById('admin-clans-tbody');
-            const sortBy = document.getElementById('sort-selector').value;
+        window.renderAdminTable = function() {
+            const tbody = document.getElementById('panel-clans-tbody');
+            const sortBy = document.getElementById('setting-sort').value;
             tbody.innerHTML = '';
 
-            if(allClansLocalArray.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #abb2bf;">No clans found.</td></tr>';
+            if(localClansArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No active clans found.</td></tr>';
                 return;
             }
 
-            let sortedClans = [...allClansLocalArray];
+            let sorted = [...localClansArray];
             if (sortBy === 'name') {
-                sortedClans.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             } else if (sortBy === 'level') {
-                sortedClans.sort((a, b) => Number(b.level || 0) - Number(a.level || 0));
+                sorted.sort((a, b) => Number(b.level || 0) - Number(a.level || 0));
             } else if (sortBy === 'category') {
-                sortedClans.sort((a, b) => (a.category || '').localeCompare(b.category || ''));
+                sorted.sort((a, b) => (a.category || '').localeCompare(b.category || ''));
             }
 
-            sortedClans.forEach(clan => {
+            sorted.forEach(clan => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong>${clan.name || 'Unknown'}</strong></td>
-                    <td>${clan.tag || 'N/A'}</td>
-                    <td>Lv ${clan.level || 'N/A'}</td>
+                    <td><strong style="color:#fff;">${clan.name || 'Unnamed'}</strong></td>
+                    <td><span style="color:var(--gaming-cyan); font-family:monospace;">${clan.tag || 'N/A'}</span></td>
+                    <td>Lv ${clan.level || '0'}</td>
                     <td><span class="cat-badge cat-${(clan.category || 'FWA').toLowerCase()}">${clan.category || 'FWA'}</span></td>
                     <td>
                         <button class="btn-table btn-edit" onclick="triggerEditMode('${clan.id}')">Edit</button>
-                        <button class="btn-table btn-delete" onclick="deleteClanProfile('${clan.id}')">Delete</button>
+                        <button class="btn-table btn-delete" onclick="deleteClanRecord('${clan.id}')">Delete</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        window.applySortOrderToWebsite = async function() {
-            const selectedOrder = document.getElementById('sort-selector').value;
-            try {
-                await setDoc(doc(db, "fwcb_settings", "sorting"), {
-                    orderBy: selectedOrder,
-                    updatedAt: new Date().getTime()
-                });
-                alert(`Success! Website is now sorted by: ${selectedOrder.toUpperCase()}`);
-            } catch(e) {
-                alert("Failed to apply order to website: " + e.message);
-            }
-        }
-
-        window.saveClanToCloud = async function() {
-            const docId = document.getElementById('editing-doc-id').value;
-            const name = document.getElementById('clan-name').value.trim();
-            const tag = document.getElementById('clan-tag').value.trim();
-            const category = document.getElementById('clan-category').value;
-            const level = document.getElementById('clan-level').value.trim();
-            const capitalLevel = document.getElementById('clan-capital').value;
-            const cwlLeague = document.getElementById('clan-cwl').value;
-            const badgeUrl = document.getElementById('clan-badge-url').value.trim();
-            const leaderFb = document.getElementById('clan-leader-fb').value.trim();
-
-            if(!name || !tag || !level) {
-                alert("Please fill up Name, Tag, and Level fields!");
-                return;
-            }
-
-            try {
-                if(docId) {
-                    await updateDoc(doc(db, "fwcb_clans", docId), {
-                        name, tag, category, level, capitalLevel, cwlLeague, badgeUrl, leaderFb
-                    });
-                    alert("Clan Profile updated successfully!");
-                } else {
-                    await addDoc(collection(db, "fwcb_clans"), {
-                        name, tag, category, level, capitalLevel, cwlLeague, badgeUrl, leaderFb
-                    });
-                    alert("New Clan Profile added successfully!");
-                }
-                resetAdminForm();
-                fetchClansForAdmin();
-            } catch(e) {
-                alert("Operation failed: " + e.message);
-            }
-        }
-
         window.triggerEditMode = function(id) {
-            const clan = allClansLocalArray.find(c => c.id === id);
+            const clan = localClansArray.find(c => c.id === id);
             if(!clan) return;
 
             document.getElementById('editing-doc-id').value = clan.id;
             document.getElementById('clan-name').value = clan.name || '';
             document.getElementById('clan-tag').value = clan.tag || '';
-            document.getElementById('clan-category').value = clan.category || 'FWA';
+            document.getElementById('clan-cat').value = clan.category || 'FWA';
             document.getElementById('clan-level').value = clan.level || '';
             document.getElementById('clan-capital').value = clan.capitalLevel || '1';
             document.getElementById('clan-cwl').value = clan.cwlLeague || 'Unranked';
-            document.getElementById('clan-badge-url').value = clan.badgeUrl || '';
+            document.getElementById('clan-badge').value = clan.badgeUrl || '';
+            document.getElementById('clan-link').value = clan.clanLink || '';
             document.getElementById('clan-leader-fb').value = clan.leaderFb || '';
 
-            document.getElementById('form-title').innerText = "Modify Clan Profile";
-            document.getElementById('btn-save-action').innerText = "Update Clan Profile";
+            document.getElementById('form-title').innerText = "Modify Clan Document";
+            document.getElementById('btn-save-clan').innerText = "Update Clan Record";
+            
+            // এডিটে চাপ দিলে অটোমেটিক ২ নম্বর "Add Clan" ফর্ম ট্যাবে চলে যাবে
+            document.getElementById('form-tab-btn').click();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        window.deleteClanProfile = async function(id) {
-            if(!confirm("Are you sure you want to delete this clan?")) return;
+        window.deleteClanRecord = async function(id) {
+            if(!confirm("Are you sure you want to purge this document?")) return;
             try {
                 await deleteDoc(doc(db, "fwcb_clans", id));
-                alert("Clan deleted successfully!");
-                fetchClansForAdmin();
-            } catch(e) {
-                alert("Delete failed: " + e.message);
+                alert("Data record successfully wiped.");
+                syncAdminDashboard();
+            } catch (e) {
+                alert("Purge operation faulted: " + e.message);
             }
         }
 
-        function resetAdminForm() {
+        function resetFormState() {
+            document.getElementById('clan-register-form').reset();
             document.getElementById('editing-doc-id').value = '';
-            document.getElementById('clan-name').value = '';
-            document.getElementById('clan-tag').value = '';
-            document.getElementById('clan-level').value = '';
-            document.getElementById('clan-capital').value = '1';
-            document.getElementById('clan-cwl').value = 'Unranked';
-            document.getElementById('clan-badge-url').value = '';
-            document.getElementById('clan-leader-fb').value = '';
-            document.getElementById('form-title').innerText = "Add New Community Clan";
-            document.getElementById('btn-save-action').innerText = "Save Clan Profile";
+            document.getElementById('form-title').innerText = "Register New Alliance";
+            document.getElementById('btn-save-clan').innerText = "Save Clan Matrix";
         }
     </script>
 </body>
