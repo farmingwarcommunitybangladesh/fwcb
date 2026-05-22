@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWCB Official - Clan Directory</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ফিক্সড ম্যাজিক সিএসএস: এটি স্ক্রিনশটের নাম এবং নিচের বাটন অটো কেটে বাদ দেবে */
+        .clan-badge-container {
+            width: 75px; /* ব্যাজের উইডথ একটু বাড়ানো হলো স্পষ্ট দেখার জন্য */
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #282c34;
+            border-radius: 50%;
+            overflow: hidden; /* ফ্রেমের বাইরের নাম ও আইকন কেটে বাদ দেওয়ার জন্য এটি আবশ্যক */
+            flex-shrink: 0;
+            border: 2px solid #3e4451;
+            position: relative;
+        }
+        
+        .clan-badge-custom {
+            width: 100%;
+            height: 100%;
+            /* ম্যাজিক প্রোপার্টি: ছবিটিকে ফ্রেমের ভেতর ১.৫ গুণ জুম করবে এবং একদম সেন্টারে ফোকাস রাখবে */
+            transform: scale(1.5); 
+            object-fit: cover;
+            transform-origin: center center;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="brand-wrapper">
+            <img src="logo.png" alt="FWCB Logo" class="site-logo" onerror="this.style.display='none'">
+            <h1 class="main-title">Farming War Community of Bangladesh</h1>
+        </div>
+        <p class="subtitle">The Elite Alliance of GFL & FWA Clans in Bangladesh</p>
+    </header>
+
+    <div class="stats-container">
+        <div class="stat-box">
+            <h3>Total Registered Clans</h3>
+            <p id="total-clans-count">0</p>
+        </div>
+        <div class="stat-box" style="border-color: #0284c7;">
+            <h3 style="color: #0284c7;">FWA Clans Count</h3>
+            <p id="fwa-clans-count">0</p>
+        </div>
+        <div class="stat-box" style="border-color: #d97706;">
+            <h3 style="color: #d97706;">GFL Clans Count</h3>
+            <p id="gfl-clans-count">0</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="filter-tabs">
+            <button class="filter-btn active" onclick="filterClans('ALL', this)">All Clans Directory</button>
+            <button class="filter-btn" onclick="filterClans('FWA', this)">FWA Clans</button>
+            <button class="filter-btn" onclick="filterClans('GFL', this)">GFL Clans</button>
+        </div>
+
+        <div class="clan-grid" id="clans-container">
+            <p class="loading-text">Connecting to secure database module...</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Copyright © 2026 FWCB Official - All Rights Reserved</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbOO6txw7yHsTUdVabM46thHXHgAvIu2U",
+            authDomain: "fwcb-official-portal.firebaseapp.com",
+            projectId: "fwcb-official-portal",
+            storageBucket: "fwcb-official-portal.firebasestorage.app",
+            messagingSenderId: "731121018316",
+            appId: "1:731121018316:web:d11b8f3a540679c2fd2969"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let fetchedClansArray = [];
+        let globalSortOrder = 'name';
+
+        window.filterClans = function(category, element) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            const container = document.getElementById('clans-container');
+            container.innerHTML = '';
+
+            const filtered = category === 'ALL' ? fetchedClansArray : fetchedClansArray.filter(c => c.category === category);
+            
+            if(filtered.length === 0) {
+                container.innerHTML = `<p class="loading-text" style="color:#abb2bf;">No clans found in ${category} tier.</p>`;
+                return;
+            }
+            sortAndRender(filtered, container);
+        }
+
+        async function loadClansDatabase() {
+            const container = document.getElementById('clans-container');
+            try {
+                try {
+                    const configSnap = await getDoc(doc(db, "fwcb_settings", "sorting"));
+                    if(configSnap.exists()) {
+                        globalSortOrder = configSnap.data().orderBy || 'name';
+                    }
+                } catch(err) { console.error(err); }
+
+                const snap = await getDocs(collection(db, "fwcb_clans"));
+                if(snap.empty) {
+                    container.innerHTML = '<p class="loading-text" style="color:#abb2bf;">Database empty. Use admin panel to add clans!</p>';
+                    return;
+                }
+
+                let fwaCount = 0, gflCount = 0;
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    fetchedClansArray.push(data);
+                    if(data.category === 'FWA') fwaCount++;
+                    if(data.category === 'GFL') gflCount++;
+                });
+
+                document.getElementById('total-clans-count').innerText = snap.size;
+                document.getElementById('fwa-clans-count').innerText = fwaCount;
+                document.getElementById('gfl-clans-count').innerText = gflCount;
+
+                container.innerHTML = '';
+                sortAndRender(fetchedClansArray, container);
+
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<p class="loading-text">Cloud Connection Failure.</p>';
+            }
+        }
+
+        function sortAndRender(arrayData, containerElement) {
+            let sorted = [...arrayData];
+            if (globalSortOrder === 'name') {
+                sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            } else if (globalSortOrder === 'level') {
+                sorted.sort((a, b) => Number(b.level || 0) - Number(a.level || 0));
+            } else if (globalSortOrder === 'category') {
+                sorted.sort((a, b) => (a.category || '').localeCompare(b.category || ''));
+            }
+
+            sorted.forEach(clan => renderClanCard(clan, containerElement));
+        }
+
+        // postimages ডিরেক্ট লিঙ্ক কনভার্টার ট্রিক
+        function getDirectImageUrl(url) {
+            if(!url) return 'https://via.placeholder.com/65';
+            if(url.includes('postimg.cc') && !url.match(/\.(jpeg|jpg|png|webp)$/i)) {
+                return url.replace('postimg.cc', 'i.postimg.cc') + '.jpg';
+            }
+            return url;
+        }
+
+        function renderClanCard(clan, targetContainer) {
+            const card = document.createElement('div');
+            card.className = 'clan-card';
+            
+            const badgeImg = getDirectImageUrl(clan.badgeUrl);
+            const clanName = clan.name ? clan.name : 'Unknown Clan';
+            const clanLevel = clan.level ? clan.level : 'N/A';
+            const capitalLevel = clan.capitalLevel ? clan.capitalLevel : 'N/A';
+            const cwlLeague = clan.cwlLeague ? clan.cwlLeague : 'Unranked';
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="clan-badge-container">
+                        <img src="${badgeImg}" class="clan-badge-custom" alt="Badge" onerror="this.src='https://via.placeholder.com/65'; this.style.transform='none';">
+                    </div>
+                    <div class="clan-meta">
+                        <h2>${clanName} <span class="cat-badge cat-${clan.category.toLowerCase()}">${clan.category}</span></h2>
+                        <div class="clan-tag-text">${clan.tag}</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="data-item"><span>Clan Level</span><strong>Lv ${clanLevel}</strong></div>
+                    <div class="data-item"><span>Capital Hall</span><strong>Level ${capitalLevel}</strong></div>
+                    <div class="data-item"><span>CWL League</span><strong>${cwlLeague}</strong></div>
+                </div>
+                <div class="card-footer">
+                    <a href="${clan.leaderFb}" target="_blank" class="leader-btn">Contact Clan Leader</a>
+                </div>
+            `;
+            targetContainer.appendChild(card);
+        }
+
+        loadClansDatabase();
+    </script>
+</body>
+</html>
