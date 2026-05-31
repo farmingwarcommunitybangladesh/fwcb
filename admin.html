@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FWCB - Admin Control Panel</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Admin Specific Custom Styling - Premium Responsive Gaming Theme */
+        /* ===== ADMIN SPECIFIC STYLES ===== */
         .admin-body {
             padding: 10px;
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto;
             box-sizing: border-box;
+            font-family: 'Rajdhani', 'Inter', sans-serif;
         }
+
+        /* Login Card */
         .login-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
-            max-width: 400px;
+            padding: 30px 25px;
+            max-width: 420px;
             margin: 80px auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border-top: 3px solid var(--gaming-cyan);
             box-sizing: border-box;
+            animation: fadeInUp 0.6s ease-out;
         }
+
         .login-card h2 {
             font-family: 'Orbitron', sans-serif;
             text-align: center;
@@ -31,247 +37,642 @@
             color: #fff;
             font-size: 18px;
             letter-spacing: 1px;
+            margin-bottom: 24px;
         }
+
+        .login-card .admin-logo {
+            display: block;
+            margin: 0 auto 18px;
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.5));
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 6px;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
+
         .form-control {
             width: 100%;
             background: #161b22;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px 12px;
+            border-radius: 8px;
+            padding: 11px 14px;
             color: #fff;
             box-sizing: border-box;
             font-size: 14px;
-            transition: border-color 0.2s;
+            font-family: 'Rajdhani', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
         }
+
         .form-control:focus {
             border-color: var(--gaming-cyan);
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.18);
         }
+
+        .form-control.input-error {
+            border-color: var(--gaming-magenta) !important;
+            box-shadow: 0 0 14px rgba(255, 0, 127, 0.2) !important;
+        }
+
+        .form-control.input-valid {
+            border-color: var(--accent-glow) !important;
+        }
+
+        .field-error-msg {
+            font-size: 11px;
+            color: var(--gaming-magenta);
+            margin-top: 4px;
+            display: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+        }
+
+        .field-error-msg.visible {
+            display: block;
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239ca3af' viewBox='0 0 24 24'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
         select.form-control option {
             background: var(--bg-card);
             color: #fff;
         }
+
         .admin-btn {
             font-family: 'Orbitron', sans-serif;
             width: 100%;
             background: var(--gaming-cyan);
             color: #06090e;
             border: none;
-            padding: 11px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
             font-weight: 800;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 12px;
+            letter-spacing: 1px;
             transition: all 0.2s;
         }
+
         .admin-btn:hover {
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            transform: translateY(-1px);
         }
+
+        .admin-btn:active {
+            transform: scale(0.98);
+        }
+
+        .admin-btn.btn-danger {
+            background: var(--gaming-magenta);
+            color: #fff;
+        }
+
+        .admin-btn.btn-danger:hover {
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+        }
+
+        /* Panel Header */
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
             gap: 10px;
+            flex-wrap: wrap;
         }
+
         .panel-header h2 {
             font-family: 'Orbitron', sans-serif;
             margin: 0;
-            font-size: 16px;
+            font-size: 18px;
             color: #fff;
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
+
         .logout-btn {
             font-family: 'Orbitron', sans-serif;
-            background: #ff007f;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            background: rgba(255, 0, 127, 0.1);
+            color: var(--gaming-magenta);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 800;
             font-size: 10px;
             text-transform: uppercase;
             white-space: nowrap;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
         }
-        
-        /* FIXED: নতুন গেমিং ট্যাব নেভিগেশন বার */
+
+        .logout-btn:hover {
+            background: var(--gaming-magenta);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
+        }
+
+        /* Admin Tabs */
         .admin-tabs {
             display: flex;
             gap: 5px;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             background: #10141c;
             padding: 4px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
         }
+
         .tab-trigger {
             flex: 1;
             background: transparent;
             border: none;
             color: var(--text-muted);
-            padding: 10px 5px;
+            padding: 12px 6px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 8px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             transition: all 0.2s;
             text-align: center;
+            white-space: nowrap;
         }
+
         .tab-trigger.active {
             background: var(--gaming-cyan);
             color: #06090e;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
         }
-        
-        /* ট্যাব কন্টেন্ট মডিউল */
+
+        .tab-trigger:hover:not(.active) {
+            color: var(--gaming-cyan);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        /* Tab Content */
         .tab-content {
             display: none;
+            animation: fadeInUp 0.3s ease-out;
         }
+
         .tab-content.active {
             display: block;
         }
 
+        /* Action Cards */
         .action-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             box-sizing: border-box;
         }
+
         .action-card h3 {
             font-family: 'Orbitron', sans-serif;
             margin-top: 0;
             color: var(--gaming-cyan);
             font-size: 14px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
             letter-spacing: 0.5px;
         }
-        
-        .form-grid-layout, .form-split-layout {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); 
+
+        /* Form Layouts */
+        .form-grid-layout,
+        .form-split-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
             gap: 12px;
         }
-        
-        /* ডেক্সটপ উইন্ডোর জন্য গ্রিড রেশিও পরিবর্তন */
+
         @media (min-width: 550px) {
-            .form-grid-layout { grid-template-columns: repeat(2, 1fr); }
-            .form-split-layout { grid-template-columns: repeat(2, 1fr); }
-            .tab-trigger { font-size: 12px; }
-            .panel-header h2 { font-size: 20px; }
+            .form-grid-layout {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-split-layout {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tab-trigger {
+                font-size: 12px;
+            }
+
+            .panel-header h2 {
+                font-size: 20px;
+            }
         }
 
-        /* টেবিল রেসপনসিভ কন্টেইনার */
+        /* Table */
         .clan-table-wrapper {
             overflow-x: auto;
             width: 100%;
             -webkit-overflow-scrolling: touch;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
         }
+
         .admin-clan-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
             color: var(--text-primary);
-            min-width: 480px;
+            min-width: 520px;
         }
-        .admin-clan-table th, .admin-clan-table td {
-            padding: 10px 8px;
+
+        .admin-clan-table th,
+        .admin-clan-table td {
+            padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
+
         .admin-clan-table th {
             background: #161b22;
             color: var(--gaming-cyan);
             font-family: 'Orbitron', sans-serif;
             font-size: 10px;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
         }
-        
+
+        .admin-clan-table tbody tr {
+            transition: background 0.15s;
+        }
+
+        .admin-clan-table tbody tr:hover {
+            background: rgba(0, 240, 255, 0.03);
+        }
+
         .btn-table {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 800;
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
-            margin-right: 3px;
-            transition: 0.2s;
+            margin-right: 4px;
+            transition: all 0.2s;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .btn-edit { background: #0284c7; color: #fff; }
-        .btn-delete { background: #ff007f; color: #fff; }
 
+        .btn-edit {
+            background: var(--accent-fwa);
+            color: #fff;
+        }
+
+        .btn-edit:hover {
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: rgba(255, 0, 127, 0.2);
+            color: var(--gaming-magenta);
+        }
+
+        .btn-delete:hover {
+            background: var(--gaming-magenta);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(255, 0, 127, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Alert Error (Login) */
         .alert-error {
-            color: #ff007f;
+            color: var(--gaming-magenta);
             font-size: 13px;
-            margin-top: 10px;
+            margin-top: 12px;
             text-align: center;
             display: none;
             font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 420px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            animation: toastSlideIn 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: all;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            animation: toastTimer 3s linear forwards;
+        }
+
+        .toast.toast-success {
+            background: #0d3320;
+            border: 1px solid var(--accent-glow);
+            border-left: 4px solid var(--accent-glow);
+        }
+
+        .toast.toast-error {
+            background: #330d1a;
+            border: 1px solid var(--gaming-magenta);
+            border-left: 4px solid var(--gaming-magenta);
+        }
+
+        .toast.toast-info {
+            background: #0d2033;
+            border: 1px solid var(--gaming-cyan);
+            border-left: 4px solid var(--gaming-cyan);
+        }
+
+        .toast-icon {
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.15s;
+            line-height: 1;
+        }
+
+        .toast-close:hover {
+            color: #fff;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes toastTimer {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+
+        /* ===== CONFIRMATION MODAL ===== */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 9, 14, 0.8);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 9995;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-dialog {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px 24px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            transform: translateY(15px);
+            transition: transform 0.3s ease;
+        }
+
+        .confirm-overlay.active .confirm-dialog {
+            transform: translateY(0);
+        }
+
+        .confirm-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .confirm-dialog h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .confirm-dialog p {
+            color: var(--text-muted);
+            margin: 0 0 22px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .confirm-actions .admin-btn {
+            width: auto;
+            min-width: 100px;
+            padding: 10px 22px;
+            font-size: 11px;
+        }
+
+        .confirm-actions .btn-cancel {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .confirm-actions .btn-cancel:hover {
+            border-color: var(--gaming-cyan);
+            color: var(--gaming-cyan);
+            box-shadow: none;
+        }
+
+        /* ===== KEYFRAME (shared) ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                margin: 40px auto;
+                padding: 20px 16px;
+            }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-trigger {
+                flex: 1 1 auto;
+                font-size: 9px;
+                padding: 10px 4px;
+            }
+
+            .toast {
+                min-width: auto;
+                max-width: calc(100vw - 40px);
+            }
+
+            .toast-container {
+                right: 10px;
+                left: 10px;
+                top: 10px;
+            }
         }
     </style>
 </head>
+
 <body class="admin-body">
 
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== CONFIRMATION MODAL ===== -->
+    <div class="confirm-overlay" id="confirmModal">
+        <div class="confirm-dialog">
+            <span class="confirm-icon">⚠️</span>
+            <h3 id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="confirm-actions">
+                <button class="admin-btn btn-cancel" onclick="closeConfirmModal()">Cancel</button>
+                <button class="admin-btn btn-danger" id="confirmActionBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LOGIN LAYER ===== -->
     <div id="login-layer">
         <div class="login-card">
+            <img src="logo.png" alt="FWCB" class="admin-logo" onerror="this.style.display='none'">
             <h2>FWCB Control Login</h2>
             <div class="form-group">
-                <label>ADMIN SECURITY EMAIL</label>
-                <input type="email" id="login-email" class="form-control" placeholder="admin@fwcb.com">
+                <label>Admin Security Email</label>
+                <input type="email" id="login-email" class="form-control" placeholder="admin@fwcb.com"
+                    autocomplete="email">
             </div>
             <div class="form-group">
-                <label>ENCRYPTED PASSWORD</label>
-                <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                <label>Encrypted Password</label>
+                <input type="password" id="login-password" class="form-control" placeholder="••••••••"
+                    autocomplete="current-password">
             </div>
             <button class="admin-btn" id="btn-login">Verify Identity</button>
             <div id="login-error" class="alert-error">Invalid Security Credentials</div>
         </div>
     </div>
 
+    <!-- ===== ADMIN PANEL LAYER ===== -->
     <div id="admin-panel-layer" style="display: none;">
         <header class="panel-header">
-            <h2>FWCB Admin Console</h2>
-            <button class="logout-btn" id="btn-logout">Logout</button>
+            <h2>⚙️ FWCB Admin Console</h2>
+            <button class="logout-btn" id="btn-logout">⬅ Logout</button>
         </header>
 
         <nav class="admin-tabs">
-            <button class="tab-trigger active" onclick="switchAdminTab('tab-config', this)">⚙️ Config</button>
-            <button class="tab-trigger" id="form-tab-btn" onclick="switchAdminTab('tab-form', this)">➕ Add Clan</button>
-            <button class="tab-trigger" onclick="switchAdminTab('tab-manifest', this)">📋 Manifest</button>
+            <button class="tab-trigger active" onclick="switchAdminTab('tab-config', this)">Config</button>
+            <button class="tab-trigger" id="form-tab-btn" onclick="switchAdminTab('tab-form', this)">Add Clan</button>
+            <button class="tab-trigger" onclick="switchAdminTab('tab-manifest', this)">Manifest</button>
         </nav>
 
+        <!-- Config Tab -->
         <div id="tab-config" class="tab-content active">
             <div class="action-card">
                 <h3>Global Directory Settings</h3>
                 <div class="form-group">
-                    <label>ORDER CLANS BY:</label>
-                    <select id="setting-sort" class="form-control" style="margin-bottom: 12px;" onchange="renderAdminTable()">
+                    <label>Order Clans By:</label>
+                    <select id="setting-sort" class="form-control" style="margin-bottom: 12px;"
+                        onchange="renderAdminTable()">
                         <option value="name">Alphabetical Name (A-Z)</option>
                         <option value="level">Highest Clan Level</option>
                         <option value="category">Category Alliance</option>
@@ -281,57 +682,97 @@
             </div>
         </div>
 
+        <!-- Add/Edit Clan Tab -->
         <div id="tab-form" class="tab-content">
             <div class="action-card">
                 <h3 id="form-title">Register New Alliance</h3>
                 <input type="hidden" id="editing-doc-id" value="">
 
-                <form id="clan-register-form" onsubmit="return false;">
+                <form id="clan-register-form" onsubmit="return false;" novalidate>
                     <div class="form-grid-layout">
                         <div class="form-group">
-                            <label>CLAN NAME</label>
-                            <input type="text" id="clan-name" class="form-control" required placeholder="e.g. Evil Army">
+                            <label>Clan Name *</label>
+                            <input type="text" id="clan-name" class="form-control" required placeholder="e.g. Evil Army"
+                                data-validate="required">
+                            <span class="field-error-msg" id="err-clan-name">Clan name is required</span>
                         </div>
                         <div class="form-group">
-                            <label>CLAN IN-GAME TAG</label>
-                            <input type="text" id="clan-tag" class="form-control" required placeholder="e.g. #2G0JRQV0C">
+                            <label>Clan In-Game Tag *</label>
+                            <input type="text" id="clan-tag" class="form-control" required placeholder="e.g. #2G0JRQV0C"
+                                data-validate="tag">
+                            <span class="field-error-msg" id="err-clan-tag">Tag must start with # (e.g. #ABC123)</span>
                         </div>
                         <div class="form-group">
-                            <label>ALLIANCE ALLOCATION</label>
+                            <label>Alliance Allocation *</label>
                             <select id="clan-cat" class="form-control">
                                 <option value="FWA">FWA Clan</option>
                                 <option value="GFL">GFL Clan</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>CLAN LEVEL</label>
-                            <input type="number" id="clan-level" class="form-control" required placeholder="e.g. 15">
+                            <label>Clan Level *</label>
+                            <input type="number" id="clan-level" class="form-control" required placeholder="e.g. 15"
+                                min="1" max="50" data-validate="number">
+                            <span class="field-error-msg" id="err-clan-level">Enter a valid clan level (1-50)</span>
                         </div>
                         <div class="form-group">
-                            <label>CAPITAL HALL TIER</label>
+                            <label>Capital Hall Tier</label>
                             <select id="clan-capital" class="form-control">
-                                <option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option><option value="6">Level 6</option><option value="7">Level 7</option><option value="8">Level 8</option><option value="9">Level 9</option><option value="10">Level 10</option>
+                                <option value="1">Level 1</option>
+                                <option value="2">Level 2</option>
+                                <option value="3">Level 3</option>
+                                <option value="4">Level 4</option>
+                                <option value="5">Level 5</option>
+                                <option value="6">Level 6</option>
+                                <option value="7">Level 7</option>
+                                <option value="8">Level 8</option>
+                                <option value="9">Level 9</option>
+                                <option value="10">Level 10</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>CWL LEAGUE RANK</label>
+                            <label>CWL League Rank</label>
                             <select id="clan-cwl" class="form-control">
-                                <option value="Unranked">Unranked</option><option value="Bronze League III">Bronze League III</option><option value="Bronze League II">Bronze League II</option><option value="Bronze League I">Bronze League I</option><option value="Silver League III">Silver League III</option><option value="Silver League II">Silver League II</option><option value="Silver League I">Silver League I</option><option value="Gold League III">Gold League III</option><option value="Gold League II">Gold League II</option><option value="Gold League I">Gold League I</option><option value="Crystal League III">Crystal League III</option><option value="Crystal League II">Crystal League II</option><option value="Crystal League I">Crystal League I</option><option value="Master League III">Master League III</option><option value="Master League II">Master League II</option><option value="Master League I">Master League I</option><option value="Champion League III">Champion League III</option><option value="Champion League II">Champion League II</option><option value="Champion League I">Champion League I</option><option value="Titan League III">Titan League III</option><option value="Titan League II">Titan League II</option><option value="Titan League I">Titan League I</option><option value="Legend League">Legend League</option>
+                                <option value="Unranked">Unranked</option>
+                                <option value="Bronze League III">Bronze III</option>
+                                <option value="Bronze League II">Bronze II</option>
+                                <option value="Bronze League I">Bronze I</option>
+                                <option value="Silver League III">Silver III</option>
+                                <option value="Silver League II">Silver II</option>
+                                <option value="Silver League I">Silver I</option>
+                                <option value="Gold League III">Gold III</option>
+                                <option value="Gold League II">Gold II</option>
+                                <option value="Gold League I">Gold I</option>
+                                <option value="Crystal League III">Crystal III</option>
+                                <option value="Crystal League II">Crystal II</option>
+                                <option value="Crystal League I">Crystal I</option>
+                                <option value="Master League III">Master III</option>
+                                <option value="Master League II">Master II</option>
+                                <option value="Master League I">Master I</option>
+                                <option value="Champion League III">Champion III</option>
+                                <option value="Champion League II">Champion II</option>
+                                <option value="Champion League I">Champion I</option>
+                                <option value="Titan League III">Titan III</option>
+                                <option value="Titan League II">Titan II</option>
+                                <option value="Titan League I">Titan I</option>
+                                <option value="Legend League">Legend League</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group" style="margin-top: 5px;">
-                        <label>BADGE URL (Postimages Direct Link)</label>
+                        <label>Badge URL (Postimages Direct Link)</label>
                         <input type="url" id="clan-badge" class="form-control" placeholder="Paste link here...">
                     </div>
                     <div class="form-split-layout">
                         <div class="form-group">
-                            <label>IN-GAME DIRECT SHARE LINK</label>
-                            <input type="url" id="clan-link" class="form-control" placeholder="https://link.clashofclans.com/...">
+                            <label>In-Game Direct Share Link</label>
+                            <input type="url" id="clan-link" class="form-control"
+                                placeholder="https://link.clashofclans.com/...">
                         </div>
                         <div class="form-group">
-                            <label>LEADER FB PROFILE LINK</label>
-                            <input type="url" id="clan-leader-fb" class="form-control" placeholder="https://facebook.com/...">
+                            <label>Leader FB Profile Link</label>
+                            <input type="url" id="clan-leader-fb" class="form-control"
+                                placeholder="https://facebook.com/...">
                         </div>
                     </div>
                     <button class="admin-btn" id="btn-save-clan" style="margin-top: 5px;">Save Clan Matrix</button>
@@ -339,6 +780,7 @@
             </div>
         </div>
 
+        <!-- Manifest Tab -->
         <div id="tab-manifest" class="tab-content">
             <div class="action-card">
                 <h3>Global Alliance Manifest</h3>
@@ -355,7 +797,8 @@
                         </thead>
                         <tbody id="panel-clans-tbody">
                             <tr>
-                                <td colspan="5" style="text-align: center; color: var(--text-muted);">Synchronizing fields...</td>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted);">Synchronizing
+                                    fields...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -364,6 +807,7 @@
         </div>
     </div>
 
+    <!-- ===== SCRIPTS ===== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -387,16 +831,109 @@
         const loginErr = document.getElementById('login-error');
 
         let localClansArray = [];
+        let pendingDeleteId = null;
 
-        // ফ্রন্টঅ্যান্ড ট্যাব সুইচিং মাস্টার লজিক
-        window.switchAdminTab = function(tabId, element) {
+        // ===== TOAST SYSTEM =====
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <span>${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            container.appendChild(toast);
+
+            // Auto remove after 3.2s
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(120%)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 3000);
+        }
+
+        // ===== CONFIRMATION MODAL =====
+        window.closeConfirmModal = function () {
+            document.getElementById('confirmModal').classList.remove('active');
+            pendingDeleteId = null;
+        }
+
+        function openConfirmModal(title, message, onConfirm) {
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmMessage').innerText = message;
+            document.getElementById('confirmModal').classList.add('active');
+
+            const confirmBtn = document.getElementById('confirmActionBtn');
+            const newBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+            newBtn.addEventListener('click', () => {
+                closeConfirmModal();
+                if (typeof onConfirm === 'function') onConfirm();
+            });
+        }
+
+        // ===== TAB SWITCHING =====
+        window.switchAdminTab = function (tabId, element) {
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.querySelectorAll('.tab-trigger').forEach(tab => tab.classList.remove('active'));
-            
+
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
         }
 
+        // ===== INLINE FIELD VALIDATION =====
+        function validateField(field) {
+            const val = field.value.trim();
+            const validateType = field.getAttribute('data-validate');
+            const errElId = 'err-' + field.id;
+            const errEl = document.getElementById(errElId);
+
+            let isValid = true;
+
+            if (validateType === 'required') {
+                isValid = val.length > 0;
+            } else if (validateType === 'tag') {
+                isValid = val.startsWith('#') && val.length >= 3;
+            } else if (validateType === 'number') {
+                const num = parseInt(val);
+                const min = parseInt(field.getAttribute('min')) || 1;
+                const max = parseInt(field.getAttribute('max')) || 50;
+                isValid = !isNaN(num) && num >= min && num <= max;
+            }
+
+            if (!isValid && val.length > 0) {
+                field.classList.add('input-error');
+                field.classList.remove('input-valid');
+                if (errEl) errEl.classList.add('visible');
+            } else if (isValid && val.length > 0) {
+                field.classList.remove('input-error');
+                field.classList.add('input-valid');
+                if (errEl) errEl.classList.remove('visible');
+            } else {
+                field.classList.remove('input-error', 'input-valid');
+                if (errEl) errEl.classList.remove('visible');
+            }
+
+            return isValid;
+        }
+
+        // Attach live validation
+        document.querySelectorAll('[data-validate]').forEach(field => {
+            field.addEventListener('input', () => validateField(field));
+            field.addEventListener('blur', () => validateField(field));
+        });
+
+        // ===== AUTH STATE =====
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loginLayer.style.display = 'none';
@@ -409,52 +946,100 @@
             }
         });
 
+        // ===== LOGIN =====
         document.getElementById('btn-login').addEventListener('click', async () => {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value;
             loginErr.style.display = 'none';
 
-            if(!email || !pass) return;
+            if (!email || !pass) {
+                loginErr.innerText = 'Please fill in both fields';
+                loginErr.style.display = 'block';
+                return;
+            }
+
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
+                showToast('Login successful! Welcome, Admin.', 'success');
             } catch (err) {
                 console.error(err);
+                loginErr.innerText = 'Invalid Security Credentials';
                 loginErr.style.display = 'block';
+                showToast('Login failed. Check your credentials.', 'error');
             }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth);
-            location.reload();
+        // Enter key to login
+        document.getElementById('login-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('btn-login').click();
         });
 
+        // ===== LOGOUT =====
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            openConfirmModal('Confirm Logout', 'Are you sure you want to logout from the admin panel?', () => {
+                signOut(auth).then(() => {
+                    location.reload();
+                });
+            });
+        });
+
+        // ===== LOAD SORT CONFIG =====
         async function loadSavedSortConfig() {
             try {
                 const configSnap = await getDoc(doc(db, "fwcb_settings", "sorting"));
-                if(configSnap.exists()) {
+                if (configSnap.exists()) {
                     document.getElementById('setting-sort').value = configSnap.data().orderBy || 'name';
                 }
-            } catch(e) { console.error(e); }
+            } catch (e) { console.error(e); }
         }
 
+        // ===== SAVE SETTINGS =====
         document.getElementById('btn-save-settings').addEventListener('click', async () => {
             const sortVal = document.getElementById('setting-sort').value;
+            const btn = document.getElementById('btn-save-settings');
+            const originalText = btn.innerText;
+            btn.innerText = 'Saving...';
+            btn.disabled = true;
+
             try {
-                await setDoc(doc(db, "fwcb_settings", "sorting"), { 
+                await setDoc(doc(db, "fwcb_settings", "sorting"), {
                     orderBy: sortVal,
                     updatedAt: new Date().getTime()
                 });
-                alert(`Success! Website layout is now sorted by: ${sortVal.toUpperCase()}`);
+                showToast(`Configuration saved! Sorting: ${sortVal.toUpperCase()}`, 'success');
             } catch (e) {
                 console.error(e);
-                alert("Matrix write operation fault.");
+                showToast('Failed to save configuration.', 'error');
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
             }
         });
 
+        // ===== SAVE CLAN (ADD/EDIT) =====
         document.getElementById('btn-save-clan').addEventListener('click', async () => {
             const form = document.getElementById('clan-register-form');
-            if(!form.checkValidity()) {
-                form.reportValidity();
+
+            // Run all validations
+            let allValid = true;
+            document.querySelectorAll('[data-validate]').forEach(field => {
+                if (!validateField(field)) allValid = false;
+            });
+
+            // Check required fields manually
+            const requiredFields = ['clan-name', 'clan-tag', 'clan-level'];
+            requiredFields.forEach(id => {
+                const f = document.getElementById(id);
+                if (!f.value.trim()) {
+                    f.classList.add('input-error');
+                    const errEl = document.getElementById('err-' + id);
+                    if (errEl) errEl.classList.add('visible');
+                    allValid = false;
+                }
+            });
+
+            if (!allValid) {
+                showToast('Please fix the highlighted fields.', 'error');
                 return;
             }
 
@@ -471,25 +1056,34 @@
                 leaderFb: document.getElementById('clan-leader-fb').value.trim()
             };
 
+            const btn = document.getElementById('btn-save-clan');
+            const originalText = btn.innerText;
+            btn.innerText = 'Saving...';
+            btn.disabled = true;
+
             try {
-                if(docId) {
+                if (docId) {
                     await updateDoc(doc(db, "fwcb_clans", docId), payload);
-                    alert("Clan Profile updated successfully!");
+                    showToast('Clan profile updated successfully!', 'success');
                 } else {
                     await addDoc(collection(db, "fwcb_clans"), payload);
-                    alert("New Clan Profile committed successfully!");
+                    showToast('New clan registered successfully!', 'success');
                 }
                 resetFormState();
                 syncAdminDashboard();
-                
-                // সেভ করার পর অটোমেটিক Manifest ট্যাবে নিয়ে যাবে দেখার জন্য
+
+                // Auto-switch to Manifest tab
                 document.querySelectorAll('.tab-trigger')[2].click();
             } catch (e) {
                 console.error(e);
-                alert("Cloud deployment rejected.");
+                showToast('Cloud deployment failed. Try again.', 'error');
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
             }
         });
 
+        // ===== SYNC DASHBOARD =====
         async function syncAdminDashboard() {
             try {
                 const snap = await getDocs(collection(db, "fwcb_clans"));
@@ -500,16 +1094,18 @@
                 renderAdminTable();
             } catch (e) {
                 console.error(e);
+                showToast('Failed to sync data from cloud.', 'error');
             }
         }
 
-        window.renderAdminTable = function() {
+        // ===== RENDER ADMIN TABLE =====
+        window.renderAdminTable = function () {
             const tbody = document.getElementById('panel-clans-tbody');
             const sortBy = document.getElementById('setting-sort').value;
             tbody.innerHTML = '';
 
-            if(localClansArray.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No active clans found.</td></tr>';
+            if (localClansArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">No active clans found. Add one from the Add Clan tab!</td></tr>';
                 return;
             }
 
@@ -525,10 +1121,10 @@
             sorted.forEach(clan => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong style="color:#fff;">${clan.name || 'Unnamed'}</strong></td>
-                    <td><span style="color:var(--gaming-cyan); font-family:monospace;">${clan.tag || 'N/A'}</span></td>
+                    <td><strong style="color:#fff;">${escapeHtml(clan.name || 'Unnamed')}</strong></td>
+                    <td><span style="color:var(--gaming-cyan); font-family:monospace;">${escapeHtml(clan.tag || 'N/A')}</span></td>
                     <td>Lv ${clan.level || '0'}</td>
-                    <td><span class="cat-badge cat-${(clan.category || 'FWA').toLowerCase()}">${clan.category || 'FWA'}</span></td>
+                    <td><span class="cat-badge cat-${(clan.category || 'FWA').toLowerCase()}">${escapeHtml(clan.category || 'FWA')}</span></td>
                     <td>
                         <button class="btn-table btn-edit" onclick="triggerEditMode('${clan.id}')">Edit</button>
                         <button class="btn-table btn-delete" onclick="deleteClanRecord('${clan.id}')">Delete</button>
@@ -538,9 +1134,16 @@
             });
         }
 
-        window.triggerEditMode = function(id) {
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        // ===== EDIT CLAN =====
+        window.triggerEditMode = function (id) {
             const clan = localClansArray.find(c => c.id === id);
-            if(!clan) return;
+            if (!clan) return;
 
             document.getElementById('editing-doc-id').value = clan.id;
             document.getElementById('clan-name').value = clan.name || '';
@@ -553,31 +1156,71 @@
             document.getElementById('clan-link').value = clan.clanLink || '';
             document.getElementById('clan-leader-fb').value = clan.leaderFb || '';
 
-            document.getElementById('form-title').innerText = "Modify Clan Document";
-            document.getElementById('btn-save-clan').innerText = "Update Clan Record";
-            
-            // এডিটে চাপ দিলে অটোমেটিক ২ নম্বর "Add Clan" ফর্ম ট্যাবে চলে যাবে
+            document.getElementById('form-title').innerText = '✏️ Modify Clan Document';
+            document.getElementById('btn-save-clan').innerText = 'Update Clan Record';
+
+            // Clear any error states
+            document.querySelectorAll('.input-error, .input-valid').forEach(el => {
+                el.classList.remove('input-error', 'input-valid');
+            });
+            document.querySelectorAll('.field-error-msg').forEach(el => {
+                el.classList.remove('visible');
+            });
+
+            // Switch to form tab
             document.getElementById('form-tab-btn').click();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        window.deleteClanRecord = async function(id) {
-            if(!confirm("Are you sure you want to purge this document?")) return;
-            try {
-                await deleteDoc(doc(db, "fwcb_clans", id));
-                alert("Data record successfully wiped.");
-                syncAdminDashboard();
-            } catch (e) {
-                alert("Purge operation faulted: " + e.message);
-            }
+        // ===== DELETE CLAN (WITH CONFIRMATION) =====
+        window.deleteClanRecord = function (id) {
+            const clan = localClansArray.find(c => c.id === id);
+            const clanName = clan ? clan.name : 'this clan';
+
+            openConfirmModal(
+                'Delete Clan Record',
+                `Are you sure you want to permanently delete "${clanName}"? This action cannot be undone.`,
+                async () => {
+                    try {
+                        await deleteDoc(doc(db, "fwcb_clans", id));
+                        showToast(`"${clanName}" has been deleted.`, 'success');
+                        syncAdminDashboard();
+                    } catch (e) {
+                        console.error(e);
+                        showToast('Delete operation failed: ' + e.message, 'error');
+                    }
+                }
+            );
         }
 
+        // ===== RESET FORM =====
         function resetFormState() {
             document.getElementById('clan-register-form').reset();
             document.getElementById('editing-doc-id').value = '';
-            document.getElementById('form-title').innerText = "Register New Alliance";
-            document.getElementById('btn-save-clan').innerText = "Save Clan Matrix";
+            document.getElementById('form-title').innerText = 'Register New Alliance';
+            document.getElementById('btn-save-clan').innerText = 'Save Clan Matrix';
+
+            // Clear validation states
+            document.querySelectorAll('.input-error, .input-valid').forEach(el => {
+                el.classList.remove('input-error', 'input-valid');
+            });
+            document.querySelectorAll('.field-error-msg').forEach(el => {
+                el.classList.remove('visible');
+            });
         }
+
+        // ===== CLOSE MODALS ON ESC =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeConfirmModal();
+            }
+        });
+
+        // ===== CLOSE CONFIRM ON OVERLAY CLICK =====
+        document.getElementById('confirmModal').addEventListener('click', function (e) {
+            if (e.target === this) closeConfirmModal();
+        });
     </script>
 </body>
+
 </html>

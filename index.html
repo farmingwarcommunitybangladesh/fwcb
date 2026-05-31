@@ -1,88 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FWCB Official - Clan Directory</title>
+    <title>FWCB Official - Clan Directory | Farming War Community of Bangladesh</title>
+    <meta name="description"
+        content="FWCB - The Elite Alliance of GFL & FWA Clans in Bangladesh. Browse, search, and connect with top Bangladeshi Clash of Clans farming clans.">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .clan-badge-container {
-            width: 75px;
-            height: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #282c34;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 2px solid #3e4451;
-            position: relative;
-        }
-        .clan-badge-custom {
-            width: 100%;
-            height: 100%;
-            transform: scale(1.5); 
-            object-fit: cover;
-            transform-origin: center center;
-        }
-    </style>
+    <link rel="icon" type="image/png" href="logo.png">
 </head>
+
 <body>
 
-    <header class="header">
-        <div class="brand-wrapper">
-            <img src="logo.png" alt="FWCB Logo" class="site-logo" onerror="this.style.display='none'">
-            <h1 class="main-title">Farming War Community of Bangladesh</h1>
+    <!-- ========== HERO SECTION ========== -->
+    <div class="hero-section">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="brand-wrapper">
+                <img src="logo.png" alt="FWCB Logo" class="site-logo" id="heroLogo" onerror="this.style.display='none'">
+                <h1 class="main-title">
+                    <span class="title-line">Farming War Community</span>
+                    <span class="title-line accent">of Bangladesh</span>
+                </h1>
+            </div>
+            <p class="subtitle">The Elite Alliance of GFL & FWA Clans in Bangladesh</p>
+            <div class="hero-cta-row">
+                <a href="#directory" class="hero-btn primary">Explore Clans</a>
+                <a href="#platforms" class="hero-btn outline">Join Community</a>
+            </div>
         </div>
-        <p class="subtitle">The Elite Alliance of GFL & FWA Clans in Bangladesh</p>
-    </header>
-
-    <div class="stats-container">
-        <div class="stat-box">
-            <h3>Total Registered Clans</h3>
-            <p id="total-clans-count">0</p>
-        </div>
-        <div class="stat-box" style="border-color: #0284c7;">
-            <h3 style="color: #0284c7;">FWA Clans Count</h3>
-            <p id="fwa-clans-count">0</p>
-        </div>
-        <div class="stat-box" style="border-color: #d97706;">
-            <h3 style="color: #d97706;">GFL Clans Count</h3>
-            <p id="gfl-clans-count">0</p>
+        <div class="hero-scroll-indicator">
+            <span>Scroll</span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+            </svg>
         </div>
     </div>
 
-    <main class="container">
-        <div class="filter-tabs">
-            <button class="filter-btn active" onclick="filterClans('ALL', this)">All Clans Directory</button>
-            <button class="filter-btn" onclick="filterClans('FWA', this)">FWA Clans</button>
-            <button class="filter-btn" onclick="filterClans('GFL', this)">GFL Clans</button>
+    <!-- ========== STATS COUNTER SECTION ========== -->
+    <div class="stats-container" id="statsSection">
+        <div class="stat-box stat-total">
+            <div class="stat-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                </svg>
+            </div>
+            <div class="stat-info">
+                <h3>Total Clans</h3>
+                <p class="count-num" id="total-clans-count" data-target="0">0</p>
+            </div>
+        </div>
+        <div class="stat-box stat-fwa">
+            <div class="stat-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+            </div>
+            <div class="stat-info">
+                <h3>FWA Clans</h3>
+                <p class="count-num" id="fwa-clans-count" data-target="0">0</p>
+            </div>
+        </div>
+        <div class="stat-box stat-gfl">
+            <div class="stat-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+            </div>
+            <div class="stat-info">
+                <h3>GFL Clans</h3>
+                <p class="count-num" id="gfl-clans-count" data-target="0">0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MAIN DIRECTORY ========== -->
+    <main class="container" id="directory">
+        <!-- Toolbar: Search + Sort + Filter -->
+        <div class="directory-toolbar">
+            <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterClans('ALL', this)">All</button>
+                <button class="filter-btn" onclick="filterClans('FWA', this)">FWA</button>
+                <button class="filter-btn" onclick="filterClans('GFL', this)">GFL</button>
+            </div>
+            <div class="toolbar-controls">
+                <div class="search-wrapper">
+                    <svg class="search-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <input type="text" id="clan-search" class="search-input"
+                        placeholder="Search clans by name or tag..." oninput="handleSearchInput()">
+                    <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;"
+                        title="Clear search">&times;</button>
+                </div>
+                <div class="sort-select-wrapper">
+                    <select id="sort-select" class="sort-select" onchange="handleSortChange()">
+                        <option value="name">Sort: Name A-Z</option>
+                        <option value="level">Sort: Highest Level</option>
+                        <option value="capitalLevel">Sort: Capital Hall</option>
+                        <option value="category">Sort: Alliance Type</option>
+                    </select>
+                </div>
+            </div>
+            <div class="results-info">
+                <span id="results-count">Showing 0 clans</span>
+            </div>
         </div>
 
+        <!-- Skeleton Loading Grid -->
         <div class="clan-grid" id="clans-container">
-            <p class="loading-text">Connecting to secure database module...</p>
+            <!-- Skeleton cards rendered by JS -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container" id="paginationContainer" style="display:none;">
+            <button class="page-btn" id="prevPageBtn" onclick="goToPage(currentPage - 1)" disabled>
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+                Prev
+            </button>
+            <div class="page-numbers" id="pageNumbers"></div>
+            <button class="page-btn" id="nextPageBtn" onclick="goToPage(currentPage + 1)">
+                Next
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <h3>No Clans Found</h3>
+            <p id="emptyStateMsg">Try adjusting your search or filter criteria.</p>
         </div>
     </main>
 
-    <footer class="footer">
+    <!-- ========== CLAN DETAIL MODAL ========== -->
+    <div class="modal-overlay" id="clanModal" onclick="closeClanModal(event)">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeClanModal()">&times;</button>
+            <div class="modal-header">
+                <div class="modal-badge-container">
+                    <img id="modal-badge" class="modal-badge-img" src="https://via.placeholder.com/100"
+                        alt="Clan Badge">
+                </div>
+                <div class="modal-title-area">
+                    <h2 id="modal-name">Clan Name</h2>
+                    <span id="modal-tag" class="modal-tag">#TAG</span>
+                    <span id="modal-cat" class="cat-badge cat-fwa">FWA</span>
+                </div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="modal-tab-bar">
+                <button class="modal-tab active" data-tab="overview"
+                    onclick="window.switchModalTab('overview')">Overview</button>
+                <button class="modal-tab" data-tab="members" onclick="window.switchModalTab('members')">Members</button>
+                <button class="modal-tab" data-tab="war" onclick="window.switchModalTab('war')">War</button>
+                <button class="modal-tab" data-tab="warlog" onclick="window.switchModalTab('warlog')">War Log</button>
+            </div>
+
+            <div class="modal-body">
+
+                <!-- TAB: Overview -->
+                <div class="modal-tab-content active" id="modal-tab-overview">
+                    <div class="modal-stats-grid">
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">Clan Level</span>
+                            <strong class="modal-stat-value" id="modal-level">N/A</strong>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">Capital Hall</span>
+                            <strong class="modal-stat-value" id="modal-capital">N/A</strong>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">CWL League</span>
+                            <strong class="modal-stat-value" id="modal-cwl">Unranked</strong>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">Alliance</span>
+                            <strong class="modal-stat-value" id="modal-alliance">N/A</strong>
+                        </div>
+                    </div>
+                    <!-- Live stats from API -->
+                    <div class="modal-live-stats" id="modal-live-stats">
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">Members</span>
+                            <strong class="modal-stat-value" id="modal-apimembers">—</strong>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">Type</span>
+                            <strong class="modal-stat-value" id="modal-apitype">—</strong>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">Required Trophies</span>
+                            <strong class="modal-stat-value" id="modal-apireqtrophies">—</strong>
+                        </div>
+                        <div class="modal-stat">
+                            <span class="modal-stat-label">War Frequency</span>
+                            <strong class="modal-stat-value" id="modal-apiwarfreq">—</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a id="modal-game-link" href="#" target="_blank" class="modal-action-btn primary">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-4c-.83 0-1.5-.67-1.5-1.5S17.67 8 18.5 8s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                            </svg>
+                            Open In-Game
+                        </a>
+                        <a id="modal-fb-link" href="#" target="_blank" class="modal-action-btn secondary">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+                            </svg>
+                            Contact Leader
+                        </a>
+                    </div>
+                </div>
+
+                <!-- TAB: Members -->
+                <div class="modal-tab-content" id="modal-tab-members">
+                    <div class="tab-loading-spinner" id="members-spinner">
+                        <div class="spinner"></div>
+                        <span>Loading members...</span>
+                    </div>
+                    <div class="tab-error-msg" id="members-error" style="display:none;"></div>
+                    <div class="member-table-wrapper" id="member-table-wrap" style="display:none;">
+                        <div class="member-count-bar" id="member-count-bar"></div>
+                        <table class="member-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>TH</th>
+                                    <th>Trophies</th>
+                                    <th>Donations</th>
+                                </tr>
+                            </thead>
+                            <tbody id="member-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: War -->
+                <div class="modal-tab-content" id="modal-tab-war">
+                    <div class="tab-loading-spinner" id="war-spinner">
+                        <div class="spinner"></div>
+                        <span>Loading war status...</span>
+                    </div>
+                    <div class="tab-error-msg" id="war-error" style="display:none;"></div>
+                    <div class="war-content" id="war-content" style="display:none;">
+                        <div class="war-scoreboard" id="war-scoreboard"></div>
+                        <div class="war-attacks-title">Attack Log</div>
+                        <div class="war-attack-list" id="war-attack-list"></div>
+                    </div>
+                </div>
+
+                <!-- TAB: War Log -->
+                <div class="modal-tab-content" id="modal-tab-warlog">
+                    <div class="tab-loading-spinner" id="warlog-spinner">
+                        <div class="spinner"></div>
+                        <span>Loading war history...</span>
+                    </div>
+                    <div class="tab-error-msg" id="warlog-error" style="display:none;"></div>
+                    <div class="warlog-list" id="warlog-list" style="display:none;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== BACK TO TOP ========== -->
+    <button class="back-to-top" id="backToTopBtn" onclick="scrollToTop()">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
+        </svg>
+    </button>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer" id="platforms">
+        <div class="footer-glow"></div>
         <div class="footer-platform-wrapper">
             <h4 class="footer-title">Join Our Official Platforms</h4>
             <div class="platform-buttons">
-                <a href="https://www.facebook.com/groups/429165856363436" target="_blank" class="platform-btn fb-platform">
-                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
+                <a href="https://www.facebook.com/groups/429165856363436" target="_blank"
+                    class="platform-btn fb-platform">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z" />
+                    </svg>
                     Facebook Group
                 </a>
-                
                 <a href="https://discord.gg/55GW3YmT" target="_blank" class="platform-btn dc-platform">
-                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/></svg>
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z" />
+                    </svg>
                     Discord Server
                 </a>
             </div>
-            <p class="copyright-text">Copyright © 2026 FWCB Official - All Rights Reserved</p>
+            <p class="copyright-text">Copyright &copy; 2026 FWCB Official &mdash; All Rights Reserved</p>
         </div>
     </footer>
 
+    <!-- ========== SCRIPTS ========== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -99,98 +332,505 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // ===== GLOBAL STATE =====
         let fetchedClansArray = [];
         let globalSortOrder = 'name';
+        let activeFilter = 'ALL';
+        let searchQuery = '';
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 9;
 
-        window.filterClans = function(category, element) {
+        // ===== EXPOSE TO GLOBAL SCOPE =====
+        window.filterClans = function (category, element) {
+            activeFilter = category;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
-
-            const container = document.getElementById('clans-container');
-            container.innerHTML = '';
-
-            const filtered = category === 'ALL' ? fetchedClansArray : fetchedClansArray.filter(c => c.category === category);
-            
-            if(filtered.length === 0) {
-                container.innerHTML = `<p class="loading-text" style="color:#abb2bf;">No clans found in ${category} tier.</p>`;
-                return;
-            }
-            sortAndRender(filtered, container);
+            currentPage = 1;
+            renderCurrentView();
         }
 
-        async function loadClansDatabase() {
-            const container = document.getElementById('clans-container');
-            try {
-                try {
-                    const configSnap = await getDoc(doc(db, "fwcb_settings", "sorting"));
-                    if(configSnap.exists()) {
-                        globalSortOrder = configSnap.data().orderBy || 'name';
-                    }
-                } catch(err) { console.error(err); }
+        window.goToPage = function (page) {
+            const totalPages = getTotalPages();
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderCurrentView();
+            document.getElementById('directory').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
-                const snap = await getDocs(collection(db, "fwcb_clans"));
-                if(snap.empty) {
-                    container.innerHTML = '<p class="loading-text" style="color:#abb2bf;">Database empty. Use admin panel to add clans!</p>';
+        window.handleSearchInput = function () {
+            searchQuery = document.getElementById('clan-search').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('searchClear');
+            clearBtn.style.display = searchQuery ? 'flex' : 'none';
+            currentPage = 1;
+            renderCurrentView();
+        }
+
+        window.clearSearch = function () {
+            document.getElementById('clan-search').value = '';
+            searchQuery = '';
+            document.getElementById('searchClear').style.display = 'none';
+            currentPage = 1;
+            renderCurrentView();
+        }
+
+        window.handleSortChange = function () {
+            globalSortOrder = document.getElementById('sort-select').value;
+            currentPage = 1;
+            renderCurrentView();
+        }
+
+        window.closeClanModal = function (event) {
+            if (event && event.target !== document.getElementById('clanModal')) return;
+            document.getElementById('clanModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ===== MODAL TAB SWITCHING =====
+        window.switchModalTab = function (tabName) {
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.modal-tab[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`modal-tab-${tabName}`).classList.add('active');
+
+            // Lazy-load API data when tab is first opened
+            if (tabName === 'members' && !membersLoaded) loadMembersTab();
+            if (tabName === 'war' && !warLoaded) loadWarTab();
+            if (tabName === 'warlog' && !warlogLoaded) loadWarLogTab();
+        }
+
+        // Track whether each tab has been loaded
+        let membersLoaded = false, warLoaded = false, warlogLoaded = false;
+        let currentClanTag = '';
+
+        // CoC Proxy URL — update this to your deployed proxy URL
+        const COC_PROXY_URL = 'https://fwcb-coc-proxy.onrender.com';
+
+        function resetLiveTabs() {
+            membersLoaded = false; warLoaded = false; warlogLoaded = false;
+            // Reset UI
+            document.getElementById('members-spinner').style.display = 'flex';
+            document.getElementById('member-table-wrap').style.display = 'none';
+            document.getElementById('members-error').style.display = 'none';
+            document.getElementById('war-spinner').style.display = 'flex';
+            document.getElementById('war-content').style.display = 'none';
+            document.getElementById('war-error').style.display = 'none';
+            document.getElementById('warlog-spinner').style.display = 'flex';
+            document.getElementById('warlog-list').style.display = 'none';
+            document.getElementById('warlog-error').style.display = 'none';
+            // Reset live stats
+            document.getElementById('modal-apimembers').innerText = '\u2014';
+            document.getElementById('modal-apitype').innerText = '\u2014';
+            document.getElementById('modal-apireqtrophies').innerText = '\u2014';
+            document.getElementById('modal-apiwarfreq').innerText = '\u2014';
+        }
+
+        window.openClanModal = function (clan) {
+            document.getElementById('modal-badge').src = getDirectImageUrl(clan.badgeUrl);
+            document.getElementById('modal-name').innerText = clan.name || 'Unknown Clan';
+            document.getElementById('modal-tag').innerText = clan.tag || '#N/A';
+            document.getElementById('modal-level').innerText = 'Lv ' + (clan.level || 'N/A');
+            document.getElementById('modal-capital').innerText = 'Level ' + (clan.capitalLevel || 'N/A');
+            document.getElementById('modal-cwl').innerText = clan.cwlLeague || 'Unranked';
+            document.getElementById('modal-alliance').innerText = clan.category || 'N/A';
+
+            const catBadge = document.getElementById('modal-cat');
+            catBadge.innerText = clan.category || 'FWA';
+            catBadge.className = 'cat-badge cat-' + (clan.category || 'fwa').toLowerCase();
+
+            document.getElementById('modal-game-link').href = clan.clanLink || '#';
+            document.getElementById('modal-fb-link').href = clan.leaderFb || '#';
+
+            // Store tag for API calls
+            currentClanTag = (clan.tag || '').replace(/^#/, '').trim();
+            resetLiveTabs();
+
+            // Switch back to overview tab
+            window.switchModalTab('overview');
+
+            // Kick off live API fetch for overview stats (background)
+            if (currentClanTag) fetchLiveOverview();
+
+            document.getElementById('clanModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ===== FETCH LIVE OVERVIEW STATS =====
+        async function fetchLiveOverview() {
+            try {
+                const resp = await fetch(`${COC_PROXY_URL}/api/clan/${currentClanTag}`);
+                const json = await resp.json();
+                if (json.success && json.data) {
+                    const d = json.data;
+                    document.getElementById('modal-apimembers').innerText = d.members || '\u2014';
+                    document.getElementById('modal-apitype').innerText = d.type || '\u2014';
+                    document.getElementById('modal-apireqtrophies').innerText = d.requiredTrophies || '\u2014';
+                    document.getElementById('modal-apiwarfreq').innerText = d.warFrequency || '\u2014';
+                }
+            } catch (e) {
+                console.warn('Live overview fetch failed:', e.message);
+            }
+        }
+
+        // ===== LOAD MEMBERS TAB =====
+        async function loadMembersTab() {
+            const spinner = document.getElementById('members-spinner');
+            const errorEl = document.getElementById('members-error');
+            const wrap = document.getElementById('member-table-wrap');
+            const countBar = document.getElementById('member-count-bar');
+            const tbody = document.getElementById('member-table-body');
+
+            spinner.style.display = 'flex';
+            errorEl.style.display = 'none';
+            wrap.style.display = 'none';
+
+            if (!currentClanTag) {
+                errorEl.innerText = 'No clan tag available.';
+                errorEl.style.display = 'block';
+                spinner.style.display = 'none';
+                membersLoaded = true;
+                return;
+            }
+
+            try {
+                const resp = await fetch(`${COC_PROXY_URL}/api/clan/${currentClanTag}`);
+                const json = await resp.json();
+                if (!json.success || !json.data) throw new Error(json.error || 'Unknown error');
+
+                const memberList = json.data.memberList || [];
+                membersLoaded = true;
+                spinner.style.display = 'none';
+
+                countBar.innerHTML = `<strong>${memberList.length}</strong> member${memberList.length !== 1 ? 's' : ''} \u2014 sorted by role`;
+                countBar.style.display = 'block';
+
+                tbody.innerHTML = '';
+                memberList.forEach((m, i) => {
+                    const roleBadge = getRoleBadgeHTML(m.role);
+                    const leagueImg = m.leagueIcon ? `<img src="${m.leagueIcon}" alt="${m.league}" class="league-icon" />` : '';
+                    const thBadge = `<span class="th-badge th-${m.townHallLevel}">TH${m.townHallLevel}</span>`;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="cell-idx">${i + 1}</td>
+                            <td class="cell-name">${escapeHtml(m.name)} <span class="member-tag-text">${escapeHtml(m.tag)}</span></td>
+                            <td class="cell-role">${roleBadge}</td>
+                            <td class="cell-th">${thBadge}</td>
+                            <td class="cell-trophies">${leagueImg} ${m.trophies}</td>
+                            <td class="cell-donations"><span class="don-count">${m.donations}</span> / ${m.donationsReceived}</td>
+                        </tr>
+                    `;
+                });
+
+                wrap.style.display = 'block';
+            } catch (e) {
+                console.error('Members fetch error:', e);
+                spinner.style.display = 'none';
+                errorEl.innerHTML = `<p>\u26a0 Could not load live member data.</p><p class="err-detail">${escapeHtml(e.message)}</p>`;
+                errorEl.style.display = 'block';
+                membersLoaded = true;
+            }
+        }
+
+        function getRoleBadgeHTML(role) {
+            const map = {
+                'leader': { cls: 'role-leader', label: 'Leader' },
+                'coLeader': { cls: 'role-coleader', label: 'Co-Leader' },
+                'admin': { cls: 'role-admin', label: 'Admin' },
+                'elder': { cls: 'role-elder', label: 'Elder' },
+                'member': { cls: 'role-member', label: 'Member' }
+            };
+            const r = map[role] || { cls: 'role-member', label: role };
+            return `<span class="role-badge ${r.cls}">${r.label}</span>`;
+        }
+
+        // ===== LOAD WAR TAB =====
+        async function loadWarTab() {
+            const spinner = document.getElementById('war-spinner');
+            const errorEl = document.getElementById('war-error');
+            const content = document.getElementById('war-content');
+            const scoreboard = document.getElementById('war-scoreboard');
+            const attackList = document.getElementById('war-attack-list');
+
+            spinner.style.display = 'flex';
+            errorEl.style.display = 'none';
+            content.style.display = 'none';
+
+            if (!currentClanTag) {
+                errorEl.innerText = 'No clan tag available.';
+                errorEl.style.display = 'block';
+                spinner.style.display = 'none';
+                warLoaded = true;
+                return;
+            }
+
+            try {
+                const resp = await fetch(`${COC_PROXY_URL}/api/clan/${currentClanTag}/war`);
+                const json = await resp.json();
+                warLoaded = true;
+                spinner.style.display = 'none';
+
+                if (!json.success || !json.data) throw new Error(json.error || 'Unknown error');
+                const d = json.data;
+
+                if (d.state === 'notInWar') {
+                    content.style.display = 'block';
+                    scoreboard.innerHTML = '<div class="war-no-war">\u2694 This clan is not currently in a war.</div>';
+                    attackList.innerHTML = '';
                     return;
                 }
 
-                let fwaCount = 0, gflCount = 0;
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    fetchedClansArray.push(data);
-                    if(data.category === 'FWA') fwaCount++;
-                    if(data.category === 'GFL') gflCount++;
+                if (d.state === 'preparation') {
+                    content.style.display = 'block';
+                    scoreboard.innerHTML = `
+                        <div class="war-prep">
+                            <div class="war-prep-title">\u2694 War Preparation Day</div>
+                            <div class="war-prep-detail">vs <strong>${escapeHtml(d.opponent?.name || 'Unknown')}</strong> (Lv ${d.opponent?.level || '?'})</div>
+                            <div class="war-prep-detail">Team size: ${d.teamSize} vs ${d.teamSize}</div>
+                        </div>`;
+                    attackList.innerHTML = '';
+                    return;
+                }
+
+                if (d.state === 'privateWarLog') {
+                    content.style.display = 'block';
+                    scoreboard.innerHTML = '<div class="war-no-war">\ud83d\udd12 War log is private for this clan.</div>';
+                    attackList.innerHTML = '';
+                    return;
+                }
+
+                // In war or war ended
+                content.style.display = 'block';
+                const our = d.clan || {};
+                const opp = d.opponent || {};
+                const isWarEnded = d.state === 'warEnded';
+                const statusLabel = isWarEnded ? 'War Ended' : 'War In Progress';
+
+                scoreboard.innerHTML = `
+                    <div class="war-vs-bar">
+                        <div class="war-team war-our">
+                            <div class="war-team-name">${escapeHtml(our.name || 'Our Clan')}</div>
+                            <div class="war-team-stars">${'\u2b50'.repeat(Math.min(our.stars || 0, 5))}<span class="war-stars-num">${our.stars || 0}</span></div>
+                            <div class="war-team-dest">${(our.destructionPercentage || 0).toFixed(2)}% destruction</div>
+                        </div>
+                        <div class="war-vs-divider">
+                            <span class="war-vs-text">VS</span>
+                            <span class="war-vs-status">${statusLabel}</span>
+                        </div>
+                        <div class="war-team war-opp">
+                            <div class="war-team-name">${escapeHtml(opp.name || 'Opponent')}</div>
+                            <div class="war-team-stars">${'\u2b50'.repeat(Math.min(opp.stars || 0, 5))}<span class="war-stars-num">${opp.stars || 0}</span></div>
+                            <div class="war-team-dest">${(opp.destructionPercentage || 0).toFixed(2)}% destruction</div>
+                        </div>
+                    </div>
+                `;
+
+                // Attack log
+                const members = our.members || [];
+                let attackHTML = '';
+                members.forEach(m => {
+                    const atks = m.attacks || [];
+                    if (atks.length === 0 && m.opponentAttacks === 0) return;
+                    attackHTML += `<div class="war-member-row">
+                        <span class="war-mem-name">${escapeHtml(m.name)}</span>
+                        <span class="th-badge th-${m.townHallLevel}">TH${m.townHallLevel}</span>
+                        <span class="war-mem-attacks">`;
+                    if (atks.length === 0) {
+                        attackHTML += `<span class="war-no-atk">No attacks yet</span>`;
+                    } else {
+                        atks.forEach(a => {
+                            const starStr = '\u2b50'.repeat(a.stars || 0);
+                            attackHTML += `<span class="war-atk-chip ${a.stars >= 3 ? 'atk-triple' : a.stars >= 2 ? 'atk-double' : 'atk-single'}">
+                                ${starStr} ${(a.destructionPercentage || 0).toFixed(0)}% vs ${escapeHtml(a.defenderName || '?')}
+                            </span>`;
+                        });
+                    }
+                    attackHTML += `</span></div>`;
                 });
-
-                document.getElementById('total-clans-count').innerText = snap.size;
-                document.getElementById('fwa-clans-count').innerText = fwaCount;
-                document.getElementById('gfl-clans-count').innerText = gflCount;
-
-                container.innerHTML = '';
-                sortAndRender(fetchedClansArray, container);
+                attackList.innerHTML = attackHTML || '<div class="war-no-atk-global">No attack data available yet.</div>';
 
             } catch (e) {
-                console.error(e);
-                container.innerHTML = '<p class="loading-text">Cloud Connection Failure.</p>';
+                console.error('War fetch error:', e);
+                spinner.style.display = 'none';
+                errorEl.innerHTML = `<p>\u26a0 Could not load war data.</p><p class="err-detail">${escapeHtml(e.message)}</p>`;
+                errorEl.style.display = 'block';
+                warLoaded = true;
             }
         }
 
-        function sortAndRender(arrayData, containerElement) {
+        // ===== LOAD WAR LOG TAB =====
+        async function loadWarLogTab() {
+            const spinner = document.getElementById('warlog-spinner');
+            const errorEl = document.getElementById('warlog-error');
+            const list = document.getElementById('warlog-list');
+
+            spinner.style.display = 'flex';
+            errorEl.style.display = 'none';
+            list.style.display = 'none';
+
+            if (!currentClanTag) {
+                errorEl.innerText = 'No clan tag available.';
+                errorEl.style.display = 'block';
+                spinner.style.display = 'none';
+                warlogLoaded = true;
+                return;
+            }
+
+            try {
+                const resp = await fetch(`${COC_PROXY_URL}/api/clan/${currentClanTag}/warlog`);
+                const json = await resp.json();
+                warlogLoaded = true;
+                spinner.style.display = 'none';
+
+                if (!json.success) throw new Error(json.error || 'Unknown error');
+
+                if (json.data === 'privateWarLog') {
+                    list.innerHTML = '<div class="warlog-empty">\ud83d\udd12 War log is private for this clan.</div>';
+                    list.style.display = 'block';
+                    return;
+                }
+
+                const wars = json.data || [];
+                if (wars.length === 0) {
+                    list.innerHTML = '<div class="warlog-empty">No war history available.</div>';
+                    list.style.display = 'block';
+                    return;
+                }
+
+                let html = '';
+                wars.forEach(w => {
+                    const resultClass = w.isWinner ? 'wl-win' : w.result === 'tie' ? 'wl-tie' : 'wl-loss';
+                    const resultIcon = w.isWinner ? '\ud83c\udfc6' : w.result === 'tie' ? '\ud83e\udd1d' : '\ud83d\udc94';
+                    const dateStr = w.endTime ? new Date(w.endTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '?';
+                    html += `
+                        <div class="warlog-row ${resultClass}">
+                            <span class="wl-icon">${resultIcon}</span>
+                            <div class="wl-info">
+                                <span class="wl-opponent">vs ${escapeHtml(w.opponent?.name || 'Unknown')} <small>(Lv ${w.opponent?.level || '?'})</small></span>
+                                <span class="wl-score">${w.clan?.stars || 0} \u2b50 (${(w.clan?.destructionPercentage || 0).toFixed(1)}%) \u2014 ${w.opponentStars || 0} \u2b50 (${(w.opponentDestruction || 0).toFixed(1)}%)</span>
+                            </div>
+                            <span class="wl-date">${dateStr}</span>
+                            <span class="wl-size">${w.teamSize}v${w.teamSize}</span>
+                        </div>
+                    `;
+                });
+                list.innerHTML = html;
+                list.style.display = 'block';
+
+            } catch (e) {
+                console.error('War log fetch error:', e);
+                spinner.style.display = 'none';
+                errorEl.innerHTML = `<p>\u26a0 Could not load war history.</p><p class="err-detail">${escapeHtml(e.message)}</p>`;
+                errorEl.style.display = 'block';
+                warlogLoaded = true;
+            }
+        }
+
+        // Simple HTML escape for XSS protection
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        window.scrollToTop = function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== HELPER: GET TOTAL PAGES =====
+        function getFilteredArray() {
+            let filtered = fetchedClansArray;
+            if (activeFilter !== 'ALL') {
+                filtered = filtered.filter(c => c.category === activeFilter);
+            }
+            if (searchQuery) {
+                filtered = filtered.filter(c => {
+                    const name = (c.name || '').toLowerCase();
+                    const tag = (c.tag || '').toLowerCase();
+                    return name.includes(searchQuery) || tag.includes(searchQuery);
+                });
+            }
+            return filtered;
+        }
+
+        function getSortedArray(arrayData) {
             let sorted = [...arrayData];
             if (globalSortOrder === 'name') {
                 sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             } else if (globalSortOrder === 'level') {
                 sorted.sort((a, b) => Number(b.level || 0) - Number(a.level || 0));
+            } else if (globalSortOrder === 'capitalLevel') {
+                sorted.sort((a, b) => Number(b.capitalLevel || 0) - Number(a.capitalLevel || 0));
             } else if (globalSortOrder === 'category') {
                 sorted.sort((a, b) => (a.category || '').localeCompare(b.category || ''));
             }
-
-            sorted.forEach(clan => renderClanCard(clan, containerElement));
+            return sorted;
         }
 
+        function getTotalPages() {
+            const filtered = getFilteredArray();
+            return Math.ceil(filtered.length / ITEMS_PER_PAGE) || 1;
+        }
+
+        function getPagedArray(sortedArray) {
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            return sortedArray.slice(start, start + ITEMS_PER_PAGE);
+        }
+
+        // ===== DIRECT IMAGE URL HELPER =====
         function getDirectImageUrl(url) {
-            if(!url) return 'https://via.placeholder.com/65';
-            if(url.includes('postimg.cc') && !url.match(/\.(jpeg|jpg|png|webp)$/i)) {
+            if (!url) return 'https://via.placeholder.com/65';
+            if (url.includes('postimg.cc') && !url.match(/\.(jpeg|jpg|png|webp)$/i)) {
                 return url.replace('postimg.cc', 'i.postimg.cc') + '.jpg';
             }
             return url;
         }
 
+        // ===== SHOW SKELETON LOADING =====
+        function showSkeletonLoading(container, count = 9) {
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const skel = document.createElement('div');
+                skel.className = 'skeleton-card';
+                skel.innerHTML = `
+                    <div class="skeleton-header">
+                        <div class="skeleton-avatar"></div>
+                        <div class="skeleton-lines">
+                            <div class="skeleton-line w-60"></div>
+                            <div class="skeleton-line w-40"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-grid">
+                        <div class="skeleton-box"></div>
+                        <div class="skeleton-box"></div>
+                        <div class="skeleton-box"></div>
+                        <div class="skeleton-box"></div>
+                    </div>
+                    <div class="skeleton-line w-100" style="margin-top:12px; height:36px; border-radius:20px;"></div>
+                `;
+                container.appendChild(skel);
+            }
+        }
+
+        // ===== RENDER CLAN CARD =====
         function renderClanCard(clan, targetContainer) {
             const card = document.createElement('div');
             card.className = 'clan-card';
-            
+            card.onclick = () => window.openClanModal(clan);
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', 'View details for ' + (clan.name || 'Unknown Clan'));
+            card.onkeydown = (e) => { if (e.key === 'Enter') window.openClanModal(clan); };
+
             const badgeImg = getDirectImageUrl(clan.badgeUrl);
-            const clanName = clan.name ? clan.name : 'Unknown Clan';
-            const clanLevel = clan.level ? clan.level : 'N/A';
-            const capitalLevel = clan.capitalLevel ? clan.capitalLevel : 'N/A';
-            const cwlLeague = clan.cwlLeague ? clan.cwlLeague : 'Unranked';
-            const clanGameLink = clan.clanLink ? clan.clanLink : '#';
+            const clanName = clan.name || 'Unknown Clan';
+            const clanLevel = clan.level || 'N/A';
+            const capitalLevel = clan.capitalLevel || 'N/A';
+            const cwlLeague = clan.cwlLeague || 'Unranked';
 
             card.innerHTML = `
                 <div class="card-header">
                     <div class="clan-badge-container">
-                        <img src="${badgeImg}" class="clan-badge-custom" alt="Badge" onerror="this.src='https://via.placeholder.com/65'; this.style.transform='none';">
+                        <img src="${badgeImg}" class="clan-badge-custom" alt="${clanName} Badge" loading="lazy" onerror="this.src='https://via.placeholder.com/65'; this.style.transform='none';">
                     </div>
                     <div class="clan-meta">
                         <h2>${clanName} <span class="cat-badge cat-${clan.category.toLowerCase()}">${clan.category}</span></h2>
@@ -202,33 +842,258 @@
                         <div class="data-box"><span>CLAN LEVEL</span><strong>Lv ${clanLevel}</strong></div>
                         <div class="data-box"><span>CAPITAL HALL</span><strong>Level ${capitalLevel}</strong></div>
                         <div class="data-box"><span>CWL LEAGUE</span><strong>${cwlLeague}</strong></div>
-                        <a href="${clanGameLink}" target="_blank" class="join-btn">
+                        <a href="${clan.clanLink || '#'}" target="_blank" class="join-btn" onclick="event.stopPropagation();" title="Open in Clash of Clans">
                             <span>IN-GAME LINK</span>
                             <strong>Join Clan</strong>
                         </a>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <a href="${clan.leaderFb}" target="_blank" class="leader-btn">Contact Clan Leader</a>
+                    <span class="leader-btn" role="button" onclick="event.stopPropagation(); window.open('${clan.leaderFb || '#'}','_blank');">Contact Clan Leader</span>
                 </div>
+                <div class="card-view-hint">Click for details</div>
             `;
             targetContainer.appendChild(card);
         }
 
-        loadClansDatabase();
-    </script>
+        // ===== RENDER PAGINATION =====
+        function renderPagination(totalPages) {
+            const container = document.getElementById('paginationContainer');
+            const numbersDiv = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
 
-    <script>
+            if (totalPages <= 1) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'flex';
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+
+            numbersDiv.innerHTML = '';
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                numbersDiv.appendChild(createPageBtn(1));
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.className = 'page-dots';
+                    dots.innerText = '...';
+                    numbersDiv.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                numbersDiv.appendChild(createPageBtn(i));
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.className = 'page-dots';
+                    dots.innerText = '...';
+                    numbersDiv.appendChild(dots);
+                }
+                numbersDiv.appendChild(createPageBtn(totalPages));
+            }
+        }
+
+        function createPageBtn(pageNum) {
+            const btn = document.createElement('button');
+            btn.className = 'page-num-btn' + (pageNum === currentPage ? ' active' : '');
+            btn.innerText = pageNum;
+            btn.onclick = () => window.goToPage(pageNum);
+            return btn;
+        }
+
+        // ===== MAIN RENDER =====
+        function renderCurrentView() {
+            const container = document.getElementById('clans-container');
+            const emptyState = document.getElementById('emptyState');
+            const emptyStateMsg = document.getElementById('emptyStateMsg');
+
+            const filtered = getFilteredArray();
+            const sorted = getSortedArray(filtered);
+            const totalPages = Math.ceil(sorted.length / ITEMS_PER_PAGE) || 1;
+
+            // Adjust currentPage if out of bounds
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const paged = getPagedArray(sorted);
+
+            // Update results count
+            document.getElementById('results-count').innerText =
+                `Showing ${sorted.length} clan${sorted.length !== 1 ? 's' : ''}${searchQuery ? ' matching "' + searchQuery + '"' : ''}`;
+
+            // Show empty state or cards
+            if (sorted.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'flex';
+                emptyStateMsg.innerText = searchQuery
+                    ? `No clans found matching "${searchQuery}". Try a different search term.`
+                    : 'No clans found in this category. Use the admin panel to add clans.';
+                document.getElementById('paginationContainer').style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                container.innerHTML = '';
+                paged.forEach(clan => renderClanCard(clan, container));
+                renderPagination(totalPages);
+            }
+        }
+
+        // ===== ANIMATED COUNTER =====
+        function animateCounters() {
+            document.querySelectorAll('.count-num').forEach(el => {
+                const target = parseInt(el.getAttribute('data-target')) || 0;
+                const duration = 1500;
+                const startTime = performance.now();
+                const startVal = 0;
+
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // Ease out cubic
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(startVal + (target - startVal) * eased);
+                    el.innerText = current;
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                requestAnimationFrame(update);
+            });
+        }
+
+        // ===== LOAD FROM FIRESTORE =====
+        async function loadClansDatabase() {
+            const container = document.getElementById('clans-container');
+            showSkeletonLoading(container, 9);
+
+            try {
+                // Load sort config
+                try {
+                    const configSnap = await getDoc(doc(db, "fwcb_settings", "sorting"));
+                    if (configSnap.exists()) {
+                        globalSortOrder = configSnap.data().orderBy || 'name';
+                        document.getElementById('sort-select').value = globalSortOrder;
+                    }
+                } catch (err) { console.error('Config load error:', err); }
+
+                const snap = await getDocs(collection(db, "fwcb_clans"));
+                if (snap.empty) {
+                    container.innerHTML = '';
+                    document.getElementById('emptyState').style.display = 'flex';
+                    document.getElementById('emptyStateMsg').innerText = 'Database is empty. Use the admin panel to add clans!';
+                    document.getElementById('paginationContainer').style.display = 'none';
+                    return;
+                }
+
+                let fwaCount = 0, gflCount = 0;
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    fetchedClansArray.push(data);
+                    if (data.category === 'FWA') fwaCount++;
+                    if (data.category === 'GFL') gflCount++;
+                });
+
+                // Set counter targets
+                document.getElementById('total-clans-count').setAttribute('data-target', snap.size);
+                document.getElementById('fwa-clans-count').setAttribute('data-target', fwaCount);
+                document.getElementById('gfl-clans-count').setAttribute('data-target', gflCount);
+
+                // Animate counters with IntersectionObserver
+                const statsSection = document.getElementById('statsSection');
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        animateCounters();
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.3 });
+                observer.observe(statsSection);
+
+                // Also update immediately in case already visible
+                setTimeout(() => {
+                    const rect = statsSection.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        animateCounters();
+                    }
+                }, 300);
+
+                renderCurrentView();
+
+            } catch (e) {
+                console.error('Database load error:', e);
+                container.innerHTML = '<p class="loading-text">Cloud Connection Failure. Please try again later.</p>';
+            }
+        }
+
+        // ===== BACK TO TOP VISIBILITY =====
+        function handleBackToTop() {
+            const btn = document.getElementById('backToTopBtn');
+            if (window.scrollY > 500) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }
+
+        // ===== SCROLL LOGO ANIMATION =====
         window.addEventListener('scroll', () => {
-            const logo = document.querySelector('.site-logo');
+            const logo = document.getElementById('heroLogo');
             if (logo) {
                 let topOffset = window.scrollY;
-                let rotateDegree = Math.min(topOffset * 0.05, 7); 
+                let rotateDegree = Math.min(topOffset * 0.05, 7);
                 let scaleUp = 1 + Math.min(topOffset * 0.0005, 0.08);
-                
                 logo.style.transform = `rotate(${rotateDegree}deg) scale(${scaleUp})`;
+            }
+            handleBackToTop();
+        });
+
+        // ===== HERO PARTICLES =====
+        function createHeroParticles() {
+            const container = document.getElementById('heroParticles');
+            if (!container) return;
+            const count = 50;
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 3 + 2;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const animDuration = Math.random() * 20 + 10;
+                const delay = Math.random() * 10;
+                const opacity = Math.random() * 0.5 + 0.1;
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    top: ${y}%;
+                    animation: floatUp ${animDuration}s ${delay}s linear infinite;
+                    opacity: ${opacity};
+                `;
+                container.appendChild(particle);
+            }
+        }
+
+        // ===== INIT =====
+        createHeroParticles();
+        loadClansDatabase();
+
+        // Keyboard shortcut for closing modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('clanModal').classList.remove('active');
+                document.body.style.overflow = '';
             }
         });
     </script>
 </body>
+
 </html>
