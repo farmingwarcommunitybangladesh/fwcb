@@ -119,14 +119,14 @@
 
         <!-- Pagination -->
         <div class="pagination-container" id="paginationContainer" style="display:none;">
-            <button class="page-btn" id="prevPageBtn" onclick="goToPage(currentPage - 1)" disabled>
+            <button class="page-btn" id="prevPageBtn" onclick="goToPage(window._currentPage - 1)" disabled>
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                 </svg>
                 Prev
             </button>
             <div class="page-numbers" id="pageNumbers"></div>
-            <button class="page-btn" id="nextPageBtn" onclick="goToPage(currentPage + 1)">
+            <button class="page-btn" id="nextPageBtn" onclick="goToPage(window._currentPage + 1)">
                 Next
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
@@ -338,6 +338,7 @@
         let activeFilter = 'ALL';
         let searchQuery = '';
         let currentPage = 1;
+        window._currentPage = currentPage;  // sync for inline onclick in HTML
         const ITEMS_PER_PAGE = 9;
         let liveBadges = {};  // tag -> badgeUrl from CoC API
 
@@ -347,6 +348,7 @@
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
             currentPage = 1;
+            window._currentPage = currentPage;
             renderCurrentView();
         }
 
@@ -354,6 +356,7 @@
             const totalPages = getTotalPages();
             if (page < 1 || page > totalPages) return;
             currentPage = page;
+            window._currentPage = currentPage;
             renderCurrentView();
             document.getElementById('directory').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -429,8 +432,12 @@
             document.getElementById('modal-badge').src = getDirectImageUrl(clan.badgeUrl);
             document.getElementById('modal-name').innerText = clan.name || 'Unknown Clan';
             document.getElementById('modal-tag').innerText = clan.tag || '#N/A';
+            // Use live capital hall level from pre-fetched data if available
+            const rawTag = (clan.tag || '').replace(/^#/, '').trim().toUpperCase();
+            const liveData = liveBadges[rawTag] || {};
+            const capitalDisplay = liveData.capitalHallLevel != null ? liveData.capitalHallLevel : (clan.capitalLevel || 'N/A');
             document.getElementById('modal-level').innerText = 'Lv ' + (clan.level || 'N/A');
-            document.getElementById('modal-capital').innerText = 'Level ' + (clan.capitalLevel || 'N/A');
+            document.getElementById('modal-capital').innerText = 'Level ' + capitalDisplay;
             document.getElementById('modal-cwl').innerText = clan.cwlLeague || 'Unranked';
             document.getElementById('modal-alliance').innerText = clan.category || 'N/A';
 
@@ -465,7 +472,7 @@
                     // Override ALL overview fields with live CoC API data
                     document.getElementById('modal-level').innerText = 'Lv ' + (d.level || 'N/A');
                     document.getElementById('modal-cwl').innerText = d.warLeague || 'Unranked';
-                    document.getElementById('modal-capital').innerText = 'Level ' + (d.capitalLeague || 'N/A');
+                    document.getElementById('modal-capital').innerText = 'Level ' + (d.capitalHallLevel || d.capitalLevel || 'N/A');
                     document.getElementById('modal-apimembers').innerText = d.members;
                     document.getElementById('modal-apitype').innerText = d.type || '\u2014';
                     document.getElementById('modal-apireqtrophies').innerText = d.requiredTrophies || '\u2014';
@@ -831,11 +838,13 @@
             card.onkeydown = (e) => { if (e.key === 'Enter') window.openClanModal(clan); };
 
             const rawTag = (clan.tag || '').replace(/^#/, '').trim().toUpperCase();
-            const liveBadgeUrl = liveBadges[rawTag];
+            const liveData = liveBadges[rawTag] || {};
+            const liveBadgeUrl = liveData.badgeUrl;
             const badgeImg = liveBadgeUrl ? liveBadgeUrl : getDirectImageUrl(clan.badgeUrl);
             const clanName = clan.name || 'Unknown Clan';
             const clanLevel = clan.level || 'N/A';
-            const capitalLevel = clan.capitalLevel || 'N/A';
+            // Use live capital hall level if available, otherwise fall back to admin input
+            const capitalLevel = liveData.capitalHallLevel != null ? liveData.capitalHallLevel : (clan.capitalLevel || 'N/A');
             const cwlLeague = clan.cwlLeague || 'Unranked';
 
             card.innerHTML = `
@@ -936,6 +945,7 @@
             // Adjust currentPage if out of bounds
             if (currentPage > totalPages) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
+            window._currentPage = currentPage;  // sync for prev/next buttons
 
             const paged = getPagedArray(sorted);
 
@@ -994,8 +1004,8 @@
                 });
                 const json = await resp.json();
                 if (json.success && json.badges) {
-                    liveBadges = json.badges;
-                    // Re-render clan cards with live badges
+                    liveBadges = json.badges;  // { tag: { badgeUrl, capitalHallLevel } }
+                    // Re-render clan cards with live badges + capital hall level
                     renderCurrentView();
                 }
             } catch (e) {

@@ -67,11 +67,20 @@ async function cocFetch(endpoint) {
 }
 
 // ── GET /api/clan/:tag ────────────────────────────────────────
-// Returns: clan info + member list (roles, trophies, league, donations)
+// Returns: clan info + member list + actual capital hall level
 app.get('/api/clan/:tag', async (req, res) => {
     try {
         const tag = encodeURIComponent('#' + req.params.tag.toUpperCase().replace(/^#/, ''));
         const clanData = await cocFetch(`/clans/${tag}`);
+
+        // Fetch capital hall level from raid seasons (actual building level, not league name)
+        let capitalHallLevel = 0;
+        try {
+            const raidData = await cocFetch(`/clans/${tag}/capitalraidseasons?limit=1`);
+            if (raidData.items && raidData.items.length > 0) {
+                capitalHallLevel = raidData.items[0].capitalHallLevel || 0;
+            }
+        } catch (e) { /* ignore — just show 0 if endpoint fails */ }
 
         res.json({
             success: true,
@@ -80,6 +89,7 @@ app.get('/api/clan/:tag', async (req, res) => {
                 tag: clanData.tag,
                 badgeUrl: clanData.badgeUrls?.medium || null,
                 level: clanData.clanLevel,
+                capitalHallLevel: capitalHallLevel,
                 members: clanData.members,
                 type: clanData.type,
                 description: clanData.description,
@@ -261,7 +271,7 @@ app.get('/api/clan/:tag/warlog', async (req, res) => {
 });
 
 // ── POST /api/clans/badges ────────────────────────────────────
-// Accepts { tags: ["tag1","tag2",...] } and returns a map of tag→badgeUrl
+// Accepts { tags: ["tag1","tag2",...] } and returns a map of tag→{badgeUrl, capitalHallLevel}
 app.post('/api/clans/badges', async (req, res) => {
     try {
         const { tags } = req.body;
@@ -273,12 +283,20 @@ app.post('/api/clans/badges', async (req, res) => {
             tags.map(async (tag) => {
                 const encoded = encodeURIComponent('#' + tag.toUpperCase().replace(/^#/, ''));
                 const data = await cocFetch(`/clans/${encoded}`);
-                return { tag, badgeUrl: data.badgeUrls?.medium || null };
+                // Also fetch capital hall level
+                let capitalHallLevel = 0;
+                try {
+                    const raidData = await cocFetch(`/clans/${encoded}/capitalraidseasons?limit=1`);
+                    if (raidData.items && raidData.items.length > 0) {
+                        capitalHallLevel = raidData.items[0].capitalHallLevel || 0;
+                    }
+                } catch (e) { /* ignore */ }
+                return { tag, badgeUrl: data.badgeUrls?.medium || null, capitalHallLevel };
             })
         );
         results.forEach(r => {
             if (r.status === 'fulfilled' && r.value) {
-                badges[r.value.tag] = r.value.badgeUrl;
+                badges[r.value.tag] = { badgeUrl: r.value.badgeUrl, capitalHallLevel: r.value.capitalHallLevel };
             }
         });
         res.json({ success: true, badges });
