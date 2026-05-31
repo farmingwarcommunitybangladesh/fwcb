@@ -101,14 +101,14 @@ body::before {
    ========================================================================== */
 .hero-section {
     position: relative;
-    min-height: 82vh;
+    min-height: 60vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     overflow: hidden;
     background: linear-gradient(180deg, #0a1018 0%, #060d14 40%, var(--bg-main) 100%);
-    padding: 50px 0 30px 0;
+    padding: 28px 0 14px 0;
 }
 
 .hero-particles {
@@ -163,17 +163,18 @@ body::before {
 .hero-content {
     position: relative;
     z-index: 3;
-    padding: 0px 20px 10px 20px;
+    padding: 0px 20px 18px 20px;
     max-width: 900px;
     width: 100%;
+    animation: fadeInUp 0.8s ease-out;
 }
 
 .brand-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
 .site-logo {
@@ -210,7 +211,7 @@ body::before {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(10px, 1.5vw, 13px);
     color: var(--text-muted);
-    margin: 6px 0 20px 0;
+    margin: 4px 0 12px 0;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -303,7 +304,7 @@ body::before {
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     max-width: 950px;
-    margin: -40px auto 20px auto;
+    margin: -25px auto 15px auto;
     padding: 0 20px;
     position: relative;
     z-index: 10;
@@ -403,18 +404,18 @@ body::before {
 .container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
 }
 
 .directory-toolbar {
-    margin-bottom: 25px;
+    margin-bottom: 8px;
 }
 
 .filter-tabs {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
 }
 
@@ -453,7 +454,7 @@ body::before {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 /* Search */
@@ -924,7 +925,7 @@ body::before {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 35px;
+    margin-top: 20px;
     flex-wrap: wrap;
 }
 
@@ -1277,8 +1278,8 @@ body::before {
     position: relative;
     background: #0a1018;
     border-top: 1px solid var(--border-color);
-    padding: 50px 20px 35px;
-    margin-top: 80px;
+    padding: 30px 20px 20px;
+    margin-top: 30px;
     text-align: center;
     overflow: hidden;
 }
@@ -1406,10 +1407,6 @@ body::before {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.hero-content {
-    animation: fadeInUp 0.8s ease-out;
 }
 
 /* ==========================================================================
@@ -1904,8 +1901,6 @@ body::before {
     background: rgba(255, 255, 255, 0.02);
 }
 
-.warlog-row.wl-win {}
-
 .warlog-row.wl-loss {
     opacity: 0.7;
 }
@@ -1968,24 +1963,40 @@ body::before {
    ========================================================================== */
 @media (max-width: 768px) {
     .hero-section {
-        min-height: 90vh;
+        min-height: auto;
+        padding: 18px 0 10px 0;
+        align-items: flex-start;
     }
 
     .site-logo {
-        height: 65px;
+        height: 55px;
+    }
+
+    .hero-scroll-indicator {
+        bottom: 2px;
+    }
+
+    .hero-content {
+        padding: 0px 16px 14px 16px;
+    }
+
+    .brand-wrapper {
+        gap: 8px;
+        margin-bottom: 6px;
     }
 
     .stats-container {
         grid-template-columns: 1fr;
-        gap: 10px;
-        margin-top: -40px;
+        gap: 8px;
+        margin-top: -15px;
+        margin-bottom: 8px;
         padding: 0 15px;
     }
 
     .stat-box {
         flex-direction: row;
         justify-content: flex-start;
-        padding: 16px 18px;
+        padding: 14px 16px;
     }
 
     .stat-info {
@@ -2001,13 +2012,37 @@ body::before {
         gap: 15px;
     }
 
+    .filter-tabs {
+        margin-bottom: 6px;
+        gap: 5px;
+    }
+
     .toolbar-controls {
         flex-direction: column;
         align-items: stretch;
+        gap: 6px;
+        margin-bottom: 4px;
     }
 
     .search-wrapper {
         max-width: 100%;
+        position: relative;
+    }
+
+    .search-input {
+        padding: 10px 38px 10px 36px;
+        font-size: 14px;
+        height: 42px;
+    }
+
+    .search-icon {
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .search-clear {
+        right: 10px;
     }
 
     .sort-select-wrapper {
@@ -2089,6 +2124,25 @@ body::before {
 }
 
 @media (max-width: 480px) {
+    .hero-section {
+        min-height: auto;
+        padding: 16px 0 8px 0;
+        align-items: flex-start;
+    }
+
+    .site-logo {
+        height: 45px;
+    }
+
+    .hero-content {
+        padding: 0px 12px 14px 12px;
+    }
+
+    .brand-wrapper {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
     .main-title {
         font-size: 18px;
         letter-spacing: 1px;
@@ -2097,10 +2151,96 @@ body::before {
     .subtitle {
         font-size: 8px;
         letter-spacing: 2px;
+        margin: 2px 0 6px 0;
+    }
+
+    .hero-cta-row {
+        gap: 8px;
+    }
+
+    .hero-btn {
+        padding: 10px 18px;
+        font-size: 9px;
+    }
+
+    .hero-scroll-indicator {
+        display: none;
+    }
+
+    .stats-container {
+        margin-top: -10px;
+        margin-bottom: 6px;
+        padding: 0 10px;
+        gap: 6px;
+    }
+
+    .stat-box {
+        padding: 10px 12px;
+    }
+
+    .count-num {
+        font-size: 20px;
+    }
+
+    .search-wrapper {
+        max-width: 100%;
+        position: relative;
+    }
+
+    .search-input {
+        padding: 10px 36px 10px 34px;
+        font-size: 13px;
+        height: 40px;
+    }
+
+    .search-icon {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+    }
+
+    .search-clear {
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+
+    .container {
+        padding: 5px 12px 15px 12px;
+    }
+
+    .filter-tabs {
+        margin-bottom: 4px;
+        gap: 4px;
+    }
+
+    .toolbar-controls {
+        gap: 4px;
+        margin-bottom: 2px;
+    }
+
+    .directory-toolbar {
+        margin-bottom: 4px;
     }
 
     .clan-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 4px;
+    }
+
+    .pagination-container {
+        margin-top: 12px;
+    }
+
+    .footer {
+        padding: 20px 15px 15px;
+        margin-top: 20px;
     }
 
     .modal-badge-container {
