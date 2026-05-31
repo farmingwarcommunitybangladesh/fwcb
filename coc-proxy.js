@@ -22,26 +22,25 @@ const PORT = process.env.PORT || 3000;
 const COC_API_TOKEN = process.env.COC_API_TOKEN || '';
 const COC_BASE = 'https://api.clashofclans.com/v1';
 
-// ── CORS: allow your frontend domain ──────────────────────────
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['http://localhost:5500', 'http://127.0.0.1:5500', 'https://fwcb-official-portal.firebaseapp.com'];
-
-app.use(cors({
-    origin: (origin, cb) => {
-        // Allow requests with no origin (server-to-server, mobile apps)
-        if (!origin) return cb(null, true);
-        if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-        console.warn(`[CORS] Blocked origin: ${origin}`);
-        cb(null, false);
-    }
-}));
+// ── CORS: allow all origins (public proxy, no auth) ───────────
+app.use(cors({ origin: '*' }));
 
 app.use(express.json());
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/', (_req, res) => {
     res.json({ status: 'ok', service: 'FWCB CoC API Proxy', version: '1.0.0' });
+});
+
+// ── IP check: returns server's outbound IP ────────────────────
+app.get('/ip', async (_req, res) => {
+    try {
+        const resp = await fetch('https://api.ipify.org?format=json');
+        const data = await resp.json();
+        res.json({ outboundIP: data.ip, hint: 'Add this IP to CoC Developer Portal allowed list' });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to detect IP', detail: err.message });
+    }
 });
 
 // ── Helper: call CoC API ──────────────────────────────────────
