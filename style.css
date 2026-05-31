@@ -2026,23 +2026,7 @@ body::before {
 
     .search-wrapper {
         max-width: 100%;
-        position: relative;
-    }
-
-    .search-input {
-        padding: 10px 38px 10px 36px;
-        font-size: 14px;
-        height: 42px;
-    }
-
-    .search-icon {
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    .search-clear {
-        right: 10px;
+        flex: 0 0 auto;
     }
 
     .sort-select-wrapper {
@@ -2184,30 +2168,7 @@ body::before {
 
     .search-wrapper {
         max-width: 100%;
-        position: relative;
-    }
-
-    .search-input {
-        padding: 10px 36px 10px 34px;
-        font-size: 13px;
-        height: 40px;
-    }
-
-    .search-icon {
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 14px;
-        height: 14px;
-    }
-
-    .search-clear {
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        font-size: 12px;
+        flex: 0 0 auto;
     }
 
     .container {
