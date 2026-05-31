@@ -29,7 +29,7 @@ app.use(express.json());
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/', (_req, res) => {
-    res.json({ status: 'ok', service: 'FWCB CoC API Proxy', version: '1.0.0' });
+    res.json({ status: 'ok', service: 'FWCB CoC API Proxy', version: '2.0.0', note: 'capitalHallLevel from /capitalraidseasons, default null' });
 });
 
 // ── IP check: returns server's outbound IP ────────────────────
@@ -74,13 +74,13 @@ app.get('/api/clan/:tag', async (req, res) => {
         const clanData = await cocFetch(`/clans/${tag}`);
 
         // Fetch capital hall level from raid seasons (actual building level, not league name)
-        let capitalHallLevel = 0;
+        let capitalHallLevel = null;
         try {
             const raidData = await cocFetch(`/clans/${tag}/capitalraidseasons?limit=1`);
             if (raidData.items && raidData.items.length > 0) {
-                capitalHallLevel = raidData.items[0].capitalHallLevel || 0;
+                capitalHallLevel = raidData.items[0].capitalHallLevel || null;
             }
-        } catch (e) { /* ignore — just show 0 if endpoint fails */ }
+        } catch (e) { /* ignore — capitalHallLevel stays null */ }
 
         res.json({
             success: true,
@@ -284,13 +284,13 @@ app.post('/api/clans/badges', async (req, res) => {
                 const encoded = encodeURIComponent('#' + tag.toUpperCase().replace(/^#/, ''));
                 const data = await cocFetch(`/clans/${encoded}`);
                 // Also fetch capital hall level
-                let capitalHallLevel = 0;
+                let capitalHallLevel = null;
                 try {
                     const raidData = await cocFetch(`/clans/${encoded}/capitalraidseasons?limit=1`);
                     if (raidData.items && raidData.items.length > 0) {
-                        capitalHallLevel = raidData.items[0].capitalHallLevel || 0;
+                        capitalHallLevel = raidData.items[0].capitalHallLevel || null;
                     }
-                } catch (e) { /* ignore */ }
+                } catch (e) { /* ignore — capitalHallLevel stays null */ }
                 return { tag, badgeUrl: data.badgeUrls?.medium || null, capitalHallLevel };
             })
         );
