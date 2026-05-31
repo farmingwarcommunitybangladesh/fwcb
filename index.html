@@ -435,7 +435,7 @@
             // Use live capital hall level from pre-fetched data if available
             const rawTag = (clan.tag || '').replace(/^#/, '').trim().toUpperCase();
             const liveData = liveBadges[rawTag] || {};
-            const capitalDisplay = liveData.capitalHallLevel != null ? liveData.capitalHallLevel : (clan.capitalLevel || 'N/A');
+            const capitalDisplay = (liveData.capitalHallLevel > 0) ? liveData.capitalHallLevel : (clan.capitalLevel || 'N/A');
             document.getElementById('modal-level').innerText = 'Lv ' + (clan.level || 'N/A');
             document.getElementById('modal-capital').innerText = 'Level ' + capitalDisplay;
             document.getElementById('modal-cwl').innerText = clan.cwlLeague || 'Unranked';
@@ -472,7 +472,10 @@
                     // Override ALL overview fields with live CoC API data
                     document.getElementById('modal-level').innerText = 'Lv ' + (d.level || 'N/A');
                     document.getElementById('modal-cwl').innerText = d.warLeague || 'Unranked';
-                    document.getElementById('modal-capital').innerText = 'Level ' + (d.capitalHallLevel || d.capitalLevel || 'N/A');
+                    // Live capital hall level (only if CoC API returned a real value >0)
+                    if (d.capitalHallLevel > 0) {
+                        document.getElementById('modal-capital').innerText = 'Level ' + d.capitalHallLevel;
+                    }
                     document.getElementById('modal-apimembers').innerText = d.members;
                     document.getElementById('modal-apitype').innerText = d.type || '\u2014';
                     document.getElementById('modal-apireqtrophies').innerText = d.requiredTrophies || '\u2014';
@@ -844,7 +847,7 @@
             const clanName = clan.name || 'Unknown Clan';
             const clanLevel = clan.level || 'N/A';
             // Use live capital hall level if available, otherwise fall back to admin input
-            const capitalLevel = liveData.capitalHallLevel != null ? liveData.capitalHallLevel : (clan.capitalLevel || 'N/A');
+            const capitalLevel = (liveData.capitalHallLevel > 0) ? liveData.capitalHallLevel : (clan.capitalLevel || 'N/A');
             const cwlLeague = clan.cwlLeague || 'Unranked';
 
             card.innerHTML = `
