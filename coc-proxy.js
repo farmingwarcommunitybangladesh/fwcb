@@ -78,8 +78,9 @@ app.get('/api/clan/:tag', async (req, res) => {
             data: {
                 name: clanData.name,
                 tag: clanData.tag,
+                badgeUrl: clanData.badgeUrls?.medium || null,
                 level: clanData.clanLevel,
-                members: clanData.memberList || 0,
+                members: clanData.members,
                 type: clanData.type,
                 description: clanData.description,
                 location: clanData.location?.name || 'International',
@@ -189,7 +190,7 @@ app.get('/api/clan/:tag/war', async (req, res) => {
                             destructionPercentage: a.destructionPercentage,
                             duration: a.duration,
                             defenderTag: a.defenderTag,
-                            defenderName: a.defenderName || '',
+                            defenderName: a.defenderName || a.defenderTag || 'Unknown',
                             defenderMapPosition: a.defenderMapPosition
                         }))
                     }))
@@ -256,6 +257,34 @@ app.get('/api/clan/:tag/warlog', async (req, res) => {
             success: false,
             error: err.message
         });
+    }
+});
+
+// ── POST /api/clans/badges ────────────────────────────────────
+// Accepts { tags: ["tag1","tag2",...] } and returns a map of tag→badgeUrl
+app.post('/api/clans/badges', async (req, res) => {
+    try {
+        const { tags } = req.body;
+        if (!Array.isArray(tags) || tags.length === 0) {
+            return res.json({ success: true, badges: {} });
+        }
+        const badges = {};
+        const results = await Promise.allSettled(
+            tags.map(async (tag) => {
+                const encoded = encodeURIComponent('#' + tag.toUpperCase().replace(/^#/, ''));
+                const data = await cocFetch(`/clans/${encoded}`);
+                return { tag, badgeUrl: data.badgeUrls?.medium || null };
+            })
+        );
+        results.forEach(r => {
+            if (r.status === 'fulfilled' && r.value) {
+                badges[r.value.tag] = r.value.badgeUrl;
+            }
+        });
+        res.json({ success: true, badges });
+    } catch (err) {
+        console.error('[/api/clans/badges] Error:', err.message);
+        res.status(err.status || 500).json({ success: false, error: err.message });
     }
 });
 

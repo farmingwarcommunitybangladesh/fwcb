@@ -339,6 +339,7 @@
         let searchQuery = '';
         let currentPage = 1;
         const ITEMS_PER_PAGE = 9;
+        let liveBadges = {};  // tag -> badgeUrl from CoC API
 
         // ===== EXPOSE TO GLOBAL SCOPE =====
         window.filterClans = function (category, element) {
@@ -461,10 +462,18 @@
                 const json = await resp.json();
                 if (json.success && json.data) {
                     const d = json.data;
-                    document.getElementById('modal-apimembers').innerText = d.members || '\u2014';
+                    // Override ALL overview fields with live CoC API data
+                    document.getElementById('modal-level').innerText = 'Lv ' + (d.level || 'N/A');
+                    document.getElementById('modal-cwl').innerText = d.warLeague || 'Unranked';
+                    document.getElementById('modal-capital').innerText = 'Level ' + (d.capitalLeague || 'N/A');
+                    document.getElementById('modal-apimembers').innerText = d.members;
                     document.getElementById('modal-apitype').innerText = d.type || '\u2014';
                     document.getElementById('modal-apireqtrophies').innerText = d.requiredTrophies || '\u2014';
                     document.getElementById('modal-apiwarfreq').innerText = d.warFrequency || '\u2014';
+                    // Replace badge with original CoC game badge if available
+                    if (d.badgeUrl) {
+                        document.getElementById('modal-badge').src = d.badgeUrl;
+                    }
                 }
             } catch (e) {
                 console.warn('Live overview fetch failed:', e.message);
@@ -534,7 +543,7 @@
             const map = {
                 'leader': { cls: 'role-leader', label: 'Leader' },
                 'coLeader': { cls: 'role-coleader', label: 'Co-Leader' },
-                'admin': { cls: 'role-admin', label: 'Admin' },
+                'admin': { cls: 'role-elder', label: 'Elder' },
                 'elder': { cls: 'role-elder', label: 'Elder' },
                 'member': { cls: 'role-member', label: 'Member' }
             };
@@ -708,7 +717,7 @@
                                 <span class="wl-score">${w.clan?.stars || 0} \u2b50 (${(w.clan?.destructionPercentage || 0).toFixed(1)}%) \u2014 ${w.opponentStars || 0} \u2b50 (${(w.opponentDestruction || 0).toFixed(1)}%)</span>
                             </div>
                             <span class="wl-date">${dateStr}</span>
-                            <span class="wl-size">${w.teamSize}v${w.teamSize}</span>
+                            <span class="wl-size">${w.teamSize || '?'}v${w.teamSize || '?'}</span>
                         </div>
                     `;
                 });
@@ -821,7 +830,9 @@
             card.setAttribute('aria-label', 'View details for ' + (clan.name || 'Unknown Clan'));
             card.onkeydown = (e) => { if (e.key === 'Enter') window.openClanModal(clan); };
 
-            const badgeImg = getDirectImageUrl(clan.badgeUrl);
+            const rawTag = (clan.tag || '').replace(/^#/, '').trim().toUpperCase();
+            const liveBadgeUrl = liveBadges[rawTag];
+            const badgeImg = liveBadgeUrl ? liveBadgeUrl : getDirectImageUrl(clan.badgeUrl);
             const clanName = clan.name || 'Unknown Clan';
             const clanLevel = clan.level || 'N/A';
             const capitalLevel = clan.capitalLevel || 'N/A';
@@ -971,6 +982,27 @@
             });
         }
 
+        // ===== FETCH LIVE BADGES FROM CoC API =====
+        async function fetchLiveBadges() {
+            try {
+                const tags = fetchedClansArray.map(c => (c.tag || '').replace(/^#/, '').trim().toUpperCase()).filter(Boolean);
+                if (tags.length === 0) return;
+                const resp = await fetch(`${COC_PROXY_URL}/api/clans/badges`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tags })
+                });
+                const json = await resp.json();
+                if (json.success && json.badges) {
+                    liveBadges = json.badges;
+                    // Re-render clan cards with live badges
+                    renderCurrentView();
+                }
+            } catch (e) {
+                console.warn('Live badges fetch failed:', e.message);
+            }
+        }
+
         // ===== LOAD FROM FIRESTORE =====
         async function loadClansDatabase() {
             const container = document.getElementById('clans-container');
@@ -1007,6 +1039,9 @@
                 document.getElementById('total-clans-count').setAttribute('data-target', snap.size);
                 document.getElementById('fwa-clans-count').setAttribute('data-target', fwaCount);
                 document.getElementById('gfl-clans-count').setAttribute('data-target', gflCount);
+
+                // Fetch original game badges from CoC API (background)
+                fetchLiveBadges();
 
                 // Animate counters with IntersectionObserver
                 const statsSection = document.getElementById('statsSection');

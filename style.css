@@ -1994,17 +1994,22 @@ body::before {
     }
 
     .stat-box {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: 14px 16px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 14px;
+    }
+
+    .stat-icon {
+        margin-bottom: 4px;
     }
 
     .stat-info {
-        text-align: left;
+        text-align: center;
     }
 
     .count-num {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .clan-grid {
@@ -2159,11 +2164,32 @@ body::before {
     }
 
     .stat-box {
-        padding: 10px 12px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 10px;
+    }
+
+    .stat-icon {
+        margin-bottom: 3px;
+    }
+
+    .stat-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .stat-info {
+        text-align: center;
+    }
+
+    .stat-info h3 {
+        font-size: 7px;
+        margin-bottom: 4px;
     }
 
     .count-num {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .search-wrapper {
