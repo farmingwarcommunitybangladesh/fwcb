@@ -527,7 +527,7 @@
                     const roleBadge = getRoleBadgeHTML(m.role);
                     const leagueImg = m.leagueIcon ? `<img src="${m.leagueIcon}" alt="${m.league}" class="league-icon" onerror="this.style.display='none'" />` : '';
                     const leagueDisplay = m.league && m.league !== 'Unranked'
-                        ? `${leagueImg}<span class="league-name-text">${m.league}</span>`
+                        ? `${leagueImg}<div class="league-info-wrap"><span class="league-name-text">${m.league}</span><span class="trophy-count">${m.trophies}</span></div>`
                         : (leagueImg || `<span class="trophy-count">${m.trophies}</span>`);
                     const thBadge = `<span class="th-badge th-${m.townHallLevel}">TH${m.townHallLevel}</span>`;
                     tbody.innerHTML += `

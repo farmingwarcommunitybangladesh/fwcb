@@ -1635,6 +1635,12 @@ body::before {
     height: 32px;
 }
 
+.league-info-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
 .league-name-text {
     font-size: 10px;
     font-weight: 600;
