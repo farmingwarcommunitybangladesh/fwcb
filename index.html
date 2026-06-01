@@ -525,7 +525,10 @@
                 tbody.innerHTML = '';
                 memberList.forEach((m, i) => {
                     const roleBadge = getRoleBadgeHTML(m.role);
-                    const leagueImg = m.leagueIcon ? `<img src="${m.leagueIcon}" alt="${m.league}" class="league-icon" />` : '';
+                    const leagueImg = m.leagueIcon ? `<img src="${m.leagueIcon}" alt="${m.league}" class="league-icon" onerror="this.style.display='none'" />` : '';
+                    const leagueDisplay = m.league && m.league !== 'Unranked'
+                        ? `${leagueImg}<span class="league-name-text">${m.league}</span>`
+                        : (leagueImg || `<span class="trophy-count">${m.trophies}</span>`);
                     const thBadge = `<span class="th-badge th-${m.townHallLevel}">TH${m.townHallLevel}</span>`;
                     tbody.innerHTML += `
                         <tr>
@@ -533,7 +536,7 @@
                             <td class="cell-name">${escapeHtml(m.name)} <span class="member-tag-text">${escapeHtml(m.tag)}</span></td>
                             <td class="cell-role">${roleBadge}</td>
                             <td class="cell-th">${thBadge}</td>
-                            <td class="cell-trophies">${leagueImg} ${m.trophies}</td>
+                            <td class="cell-trophies">${leagueDisplay}</td>
                             <td class="cell-donations"><span class="don-count">${m.donations}</span> / ${m.donationsReceived}</td>
                         </tr>
                     `;

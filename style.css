@@ -1635,6 +1635,19 @@ body::before {
     height: 32px;
 }
 
+.league-name-text {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.trophy-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
 .cell-donations {
     font-size: 11px;
     color: var(--text-muted);

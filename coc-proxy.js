@@ -22,6 +22,35 @@ const PORT = process.env.PORT || 3000;
 const COC_API_TOKEN = process.env.COC_API_TOKEN || '';
 const COC_BASE = 'https://api.clashofclans.com/v1';
 
+// ── League icon fallback map ──────────────────────────────────
+// CoC /clans/{tag} endpoint does NOT include m.league.iconUrls
+// for member objects. This static map provides the icon URLs.
+const LEAGUE_ICON_MAP = {
+    'Unranked': 'https://api-assets.clashofclans.com/leagues/72.png',
+    'Bronze League III': 'https://api-assets.clashofclans.com/leagues/73.png',
+    'Bronze League II': 'https://api-assets.clashofclans.com/leagues/74.png',
+    'Bronze League I': 'https://api-assets.clashofclans.com/leagues/75.png',
+    'Silver League III': 'https://api-assets.clashofclans.com/leagues/76.png',
+    'Silver League II': 'https://api-assets.clashofclans.com/leagues/77.png',
+    'Silver League I': 'https://api-assets.clashofclans.com/leagues/78.png',
+    'Gold League III': 'https://api-assets.clashofclans.com/leagues/79.png',
+    'Gold League II': 'https://api-assets.clashofclans.com/leagues/80.png',
+    'Gold League I': 'https://api-assets.clashofclans.com/leagues/81.png',
+    'Crystal League III': 'https://api-assets.clashofclans.com/leagues/82.png',
+    'Crystal League II': 'https://api-assets.clashofclans.com/leagues/83.png',
+    'Crystal League I': 'https://api-assets.clashofclans.com/leagues/84.png',
+    'Master League III': 'https://api-assets.clashofclans.com/leagues/85.png',
+    'Master League II': 'https://api-assets.clashofclans.com/leagues/86.png',
+    'Master League I': 'https://api-assets.clashofclans.com/leagues/87.png',
+    'Champion League III': 'https://api-assets.clashofclans.com/leagues/88.png',
+    'Champion League II': 'https://api-assets.clashofclans.com/leagues/89.png',
+    'Champion League I': 'https://api-assets.clashofclans.com/leagues/90.png',
+    'Titan League III': 'https://api-assets.clashofclans.com/leagues/91.png',
+    'Titan League II': 'https://api-assets.clashofclans.com/leagues/92.png',
+    'Titan League I': 'https://api-assets.clashofclans.com/leagues/93.png',
+    'Legend League': 'https://api-assets.clashofclans.com/leagues/94.png'
+};
+
 // ── CORS: allow all origins (public proxy, no auth) ───────────
 app.use(cors({ origin: '*' }));
 
@@ -105,19 +134,28 @@ app.get('/api/clan/:tag', async (req, res) => {
                 capitalLeague: clanData.capitalLeague?.name || 'Unranked',
                 requiredTrophies: clanData.requiredTrophies,
                 warLeague: clanData.warLeague?.name || 'Unranked',
-                memberList: (clanData.memberList || []).map(m => ({
-                    name: m.name,
-                    tag: m.tag,
-                    role: m.role,
-                    trophies: m.trophies,
-                    builderBaseTrophies: m.builderBaseTrophies,
-                    donations: m.donations,
-                    donationsReceived: m.donationsReceived,
-                    expLevel: m.expLevel,
-                    townHallLevel: m.townHallLevel || 'N/A',
-                    league: m.league?.name || 'Unranked',
-                    leagueIcon: m.league?.iconUrls?.large || null
-                })).sort((a, b) => {
+                memberList: (clanData.memberList || []).map(m => {
+                    const leagueName = m.league?.name || 'Unranked';
+                    const icon = m.league?.iconUrls?.large
+                        || m.league?.iconUrls?.medium
+                        || m.league?.iconUrls?.small
+                        || m.league?.iconUrls?.tiny
+                        || LEAGUE_ICON_MAP[leagueName]
+                        || null;
+                    return {
+                        name: m.name,
+                        tag: m.tag,
+                        role: m.role,
+                        trophies: m.trophies,
+                        builderBaseTrophies: m.builderBaseTrophies,
+                        donations: m.donations,
+                        donationsReceived: m.donationsReceived,
+                        expLevel: m.expLevel,
+                        townHallLevel: m.townHallLevel || 'N/A',
+                        league: leagueName,
+                        leagueIcon: icon
+                    };
+                }).sort((a, b) => {
                     const roleOrder = { 'leader': 0, 'coLeader': 1, 'admin': 2, 'elder': 2, 'member': 3 };
                     return (roleOrder[a.role] ?? 4) - (roleOrder[b.role] ?? 4);
                 })
