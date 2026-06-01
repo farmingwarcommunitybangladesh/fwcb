@@ -116,7 +116,7 @@ app.get('/api/clan/:tag', async (req, res) => {
                     expLevel: m.expLevel,
                     townHallLevel: m.townHallLevel || 'N/A',
                     league: m.league?.name || 'Unranked',
-                    leagueIcon: m.league?.iconUrls?.small || null
+                    leagueIcon: m.league?.iconUrls?.large || null
                 })).sort((a, b) => {
                     const roleOrder = { 'leader': 0, 'coLeader': 1, 'admin': 2, 'elder': 2, 'member': 3 };
                     return (roleOrder[a.role] ?? 4) - (roleOrder[b.role] ?? 4);
