@@ -622,7 +622,7 @@
     <!-- ===== CONFIRMATION MODAL ===== -->
     <div class="confirm-overlay" id="confirmModal">
         <div class="confirm-dialog">
-            <span class="confirm-icon">⚠️</span>
+            <span class="confirm-icon">âš ï¸</span>
             <h3 id="confirmTitle">Confirm Action</h3>
             <p id="confirmMessage">Are you sure you want to proceed?</p>
             <div class="confirm-actions">
@@ -644,7 +644,7 @@
             </div>
             <div class="form-group">
                 <label>Encrypted Password</label>
-                <input type="password" id="login-password" class="form-control" placeholder="••••••••"
+                <input type="password" id="login-password" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     autocomplete="current-password">
             </div>
             <button class="admin-btn" id="btn-login">Verify Identity</button>
@@ -655,8 +655,8 @@
     <!-- ===== ADMIN PANEL LAYER ===== -->
     <div id="admin-panel-layer" style="display: none;">
         <header class="panel-header">
-            <h2>⚙️ FWCB Admin Console</h2>
-            <button class="logout-btn" id="btn-logout">⬅ Logout</button>
+            <h2>âš™ï¸ FWCB Admin Console</h2>
+            <button class="logout-btn" id="btn-logout">â¬… Logout</button>
         </header>
 
         <nav class="admin-tabs">
@@ -837,9 +837,9 @@
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const icons = {
-                success: '✅',
-                error: '❌',
-                info: 'ℹ️'
+                success: 'âœ…',
+                error: 'âŒ',
+                info: 'â„¹ï¸'
             };
 
             const toast = document.createElement('div');
@@ -1156,7 +1156,7 @@
             document.getElementById('clan-link').value = clan.clanLink || '';
             document.getElementById('clan-leader-fb').value = clan.leaderFb || '';
 
-            document.getElementById('form-title').innerText = '✏️ Modify Clan Document';
+            document.getElementById('form-title').innerText = 'âœï¸ Modify Clan Document';
             document.getElementById('btn-save-clan').innerText = 'Update Clan Record';
 
             // Clear any error states
