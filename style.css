@@ -1059,8 +1059,8 @@ body::before {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-xl);
-    padding: 30px 25px;
-    max-width: 680px;
+    padding: 30px 28px;
+    max-width: 780px;
     width: 100%;
     max-height: 85vh;
     overflow-y: auto;
@@ -1157,24 +1157,24 @@ body::before {
 .modal-stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 24px;
 }
 
 .modal-stat {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.025);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 16px;
+    padding: 20px 16px;
     text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .modal-stat-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 9px;
+    font-size: 10px;
     color: var(--text-muted);
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -1183,7 +1183,7 @@ body::before {
 
 .modal-stat-value {
     font-family: 'Orbitron', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     color: #fff;
     font-weight: 900;
 }
@@ -1191,6 +1191,7 @@ body::before {
 .modal-footer {
     display: flex;
     gap: 10px;
+    margin-top: 4px;
 }
 
 .modal-action-btn {
@@ -1422,14 +1423,14 @@ body::before {
 
 .modal-tab {
     font-family: 'Orbitron', sans-serif;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     background: transparent;
     color: var(--text-muted);
     border: none;
-    padding: 10px 14px;
+    padding: 12px 18px;
     cursor: pointer;
     position: relative;
     transition: all var(--transition-fast);
@@ -1457,6 +1458,7 @@ body::before {
 
 .modal-tab-content {
     display: none;
+    padding-top: 16px;
 }
 
 .modal-tab-content.active {
@@ -1469,8 +1471,9 @@ body::before {
 .modal-live-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 12px;
+    gap: 14px;
+    margin-top: 14px;
+    margin-bottom: 20px;
 }
 
 /* ==========================================================================
@@ -1533,7 +1536,7 @@ body::before {
 }
 
 .member-table-wrapper {
-    max-height: 360px;
+    max-height: 440px;
     overflow-y: auto;
 }
 
@@ -1549,7 +1552,7 @@ body::before {
 .member-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .member-table thead {
@@ -1560,19 +1563,19 @@ body::before {
 
 .member-table th {
     font-family: 'Orbitron', sans-serif;
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 800;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    padding: 10px 8px;
+    padding: 12px 10px;
     text-align: left;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
 }
 
 .member-table td {
-    padding: 10px 8px;
+    padding: 12px 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     color: var(--text-primary);
     vertical-align: middle;
@@ -1867,7 +1870,7 @@ body::before {
    War Log List
    ========================================================================== */
 .warlog-list {
-    max-height: 360px;
+    max-height: 440px;
     overflow-y: auto;
 }
 
@@ -2084,8 +2087,8 @@ body::before {
     }
 
     .modal-tab {
-        font-size: 8px;
-        padding: 8px 10px;
+        font-size: 9px;
+        padding: 10px 12px;
     }
 
     .modal-footer {
@@ -2093,16 +2096,16 @@ body::before {
     }
 
     .member-table {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .member-table th {
-        font-size: 7px;
-        padding: 8px 4px;
+        font-size: 8px;
+        padding: 10px 6px;
     }
 
     .member-table td {
-        padding: 8px 4px;
+        padding: 10px 6px;
     }
 
     .war-vs-bar {
@@ -2283,21 +2286,21 @@ body::before {
     }
 
     .modal-tab {
-        font-size: 7px;
-        padding: 6px 8px;
+        font-size: 8px;
+        padding: 8px 10px;
     }
 
     .member-table {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     .member-table th {
-        font-size: 6px;
-        padding: 6px 3px;
+        font-size: 7px;
+        padding: 8px 4px;
     }
 
     .member-table td {
-        padding: 6px 3px;
+        padding: 8px 4px;
     }
 
     .cell-name {
